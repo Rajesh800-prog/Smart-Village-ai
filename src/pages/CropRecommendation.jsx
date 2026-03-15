@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { Sprout, TrendingUp, IndianRupee, Loader, RotateCcw, CheckCircle } from 'lucide-react';
+import { Sprout, TrendingUp, IndianRupee, Loader, RotateCcw, CheckCircle, MapPin, Calendar, Clock } from 'lucide-react';
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 import './CropRecommendation.css';
 
 const cropDatabase = {
@@ -26,6 +29,7 @@ const getKey = (soil, season, water) => {
 };
 
 const CropRecommendation = () => {
+  const { currentUser } = useAuth();
   const [form, setForm] = useState({
     soilType: '',
     location: '',
@@ -35,17 +39,49 @@ const CropRecommendation = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [history, setHistory] = useState([]);
+
+  // Fetch History
+  useEffect(() => {
+    if (!currentUser) return;
+    const q = query(
+      collection(db, 'recommendations'),
+      where('userId', '==', currentUser.uid),
+      orderBy('createdAt', 'desc')
+    );
+    const unsubscribe = onSnapshot(q, (snap) => {
+      setHistory(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }, (err) => {
+      console.error("Firestore Error:", err);
+    });
+    return unsubscribe;
+  }, [currentUser]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setResult(null);
-    setTimeout(() => {
+    
+    // Simulate AI logic
+    setTimeout(async () => {
       const rec = getKey(form.soilType, form.season, form.water);
       setResult(rec);
       setIsLoading(false);
+
+      // SAVE TO FIRESTORE
+      try {
+        await addDoc(collection(db, 'recommendations'), {
+          ...form,
+          ...rec,
+          userId: currentUser?.uid || 'guest',
+          createdAt: serverTimestamp(),
+        });
+        toast.success("Recommendation saved to your history!");
+      } catch (err) {
+        console.error("Error saving recommendation:", err);
+      }
     }, 2000);
   };
 
@@ -230,6 +266,39 @@ const CropRecommendation = () => {
           )}
         </div>
       </div>
+
+      {/* HISTORY SECTION */}
+      {history.length > 0 && (
+        <div className="rec-history mt-4">
+          <div className="section-header-inline">
+            <Clock size={24} className="text-primary" />
+            <h2 className="mb-0">Your Recommendation History</h2>
+          </div>
+          <div className="history-grid mt-3">
+            {history.map(item => (
+              <div key={item.id} className="history-card">
+                <div className="history-top">
+                  <span className="history-emoji">{item.icon}</span>
+                  <div>
+                    <h4>{item.crop}</h4>
+                    <span className="history-date">
+                      {item.createdAt?.toDate().toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    </span>
+                  </div>
+                </div>
+                <div className="history-details">
+                  <div><MapPin size={12} /> {item.location}</div>
+                  <div><Sprout size={12} /> {item.soilType} Soil</div>
+                </div>
+                <div className="history-metrics">
+                  <span><strong>{item.yield}</strong></span>
+                  <span className="text-primary"><strong>{item.profit}</strong></span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

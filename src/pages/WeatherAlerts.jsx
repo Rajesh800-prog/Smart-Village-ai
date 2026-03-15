@@ -1,4 +1,9 @@
-import { Sun, CloudRain, Wind, Droplets, Thermometer, MapPin, Calendar, Sparkles, CloudLightning } from 'lucide-react';
+import { Sun, CloudRain, Wind, Droplets, Thermometer, MapPin, Calendar, Sparkles, CloudLightning, Edit2, Check, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 import './WeatherAlerts.css';
 
 const weatherData = {
@@ -50,8 +55,33 @@ const farmingAdvice = [
 ];
 
 const WeatherAlerts = () => {
+  const { currentUser, farmerProfile } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [newLoc, setNewLoc] = useState(farmerProfile?.village || "Nashik, Maharashtra");
+  const [locLoading, setLocLoading] = useState(false);
+
+  const location = farmerProfile?.village || "Farmer Location";
   const isRainWarning = weatherData.rainChance > 60;
   const isHeatWarning = weatherData.temp > 30;
+
+  const handleUpdateLocation = async () => {
+    if (!currentUser) {
+      toast.error("Please login to save your location.");
+      return;
+    }
+    setLocLoading(true);
+    try {
+      await updateDoc(doc(db, 'farmers', currentUser.uid), {
+        village: newLoc
+      });
+      toast.success("Location updated successfully!");
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Update Location Error:", err);
+      toast.error("Failed to update location.");
+    }
+    setLocLoading(false);
+  };
 
   return (
     <div className="weather-page">
@@ -64,7 +94,26 @@ const WeatherAlerts = () => {
         <div className="weather-hero-inner">
           <div className="weather-location">
             <MapPin size={18} />
-            <span>{weatherData.location}</span>
+            {isEditing ? (
+              <div className="loc-edit-wrap">
+                <input 
+                  value={newLoc} 
+                  onChange={(e) => setNewLoc(e.target.value)}
+                  placeholder="Enter village/city"
+                  autoFocus
+                />
+                <button onClick={handleUpdateLocation} disabled={locLoading}>
+                  {locLoading ? <Loader2 className="spin" size={14} /> : <Check size={14} />}
+                </button>
+              </div>
+            ) : (
+              <>
+                <span>{location}</span>
+                <button className="edit-loc-btn" onClick={() => setIsEditing(true)}>
+                  <Edit2 size={14} />
+                </button>
+              </>
+            )}
           </div>
 
           <div className="weather-main">

@@ -30,14 +30,10 @@
 .rain-theme { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
 
 .weather-location {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255,255,255,0.15);
-  padding: 0.5rem 1rem;
-  border-radius: 30px;
-  backdrop-filter: blur(8px);
-  font-size: 0.95rem;
+  margin-bottom: 2rem;
   font-weight: 700;
   letter-spacing: 0.02em;
 }

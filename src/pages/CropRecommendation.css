@@ -44,3 +44,67 @@
   display: flex; gap: 1rem; align-items: center;
   border: 1px solid rgba(76, 175, 80, 0.1);
 }
+
+/* ── History Section ── */
+.rec-history {
+  padding: 1.5rem 0;
+}
+
+.section-header-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.history-grid {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+}
+
+.history-grid::-webkit-scrollbar { height: 6px; }
+.history-grid::-webkit-scrollbar-thumb { background: var(--gray-light); border-radius: 10px; }
+
+.history-card {
+  min-width: 250px;
+  background: white;
+  border-radius: 20px;
+  padding: 1.25rem;
+  border: 1px solid var(--gray-light);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s;
+}
+
+.history-card:hover { transform: translateY(-4px); }
+
+.history-top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.history-emoji { font-size: 2rem; }
+.history-top h4 { margin: 0; color: var(--text-dark); }
+.history-date { font-size: 0.75rem; color: var(--text-muted); }
+
+.history-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.history-details div { display: flex; align-items: center; gap: 0.4rem; }
+.history-metrics {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px dashed var(--gray-light);
+  padding-top: 0.75rem;
+  font-size: 0.9rem;
+}

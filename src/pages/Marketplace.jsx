@@ -6,7 +6,8 @@ import { useAuth } from '../context/AuthContext';
 import './Marketplace.css';
 
 /* ─── Market Price Data ─── */
-const allCrops = [
+/* ─── Initial Market Price Data ─── */
+const defaultCrops = [
   { name: "Tomato",       emoji: "🍅", price: 18,   prev: 15,   category: "Vegetables" },
   { name: "Rice",         emoji: "🌾", price: 35,   prev: 37,   category: "Grains" },
   { name: "Cotton",       emoji: "☁️", price: 72,   prev: 65,   category: "Cash Crops" },
@@ -44,12 +45,26 @@ const Marketplace = () => {
   const { currentUser, farmerProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('marketplace');
   const [listings, setListings] = useState([]);
+  const [allCrops, setAllCrops] = useState(defaultCrops);
   const [loading, setLoading] = useState(true);
+  const [pricesLoading, setPricesLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [contactId, setContactId] = useState(null);
+
+  // ─── Fetch real-time Mandi Prices ───
+  useEffect(() => {
+    const q = query(collection(db, 'mandiPrices'));
+    const unsubscribe = onSnapshot(q, (snap) => {
+      if (!snap.empty) {
+        setAllCrops(snap.docs.map(doc => doc.data()));
+      }
+      setPricesLoading(false);
+    });
+    return unsubscribe;
+  }, []);
 
   // ─── Fetch real-time listings from Firestore ───
   useEffect(() => {
