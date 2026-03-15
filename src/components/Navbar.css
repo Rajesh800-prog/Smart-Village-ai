@@ -96,3 +96,28 @@
     font-size: 1.1rem;
   }
 }
+
+/* Auth buttons in nav */
+.nav-auth-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  color: var(--danger);
+}
+
+.nav-auth-btn:hover {
+  background-color: #ffebee;
+}
+
+.nav-login-btn {
+  color: var(--primary-dark);
+  background-color: #e8f5e9;
+  border-radius: var(--radius);
+}
+
+.nav-login-btn:hover {
+  background-color: var(--primary);
+  color: white;
+}
