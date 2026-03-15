@@ -1,162 +1,242 @@
 import { useState } from 'react';
-import { TrendingUp, TrendingDown, Minus, ShoppingCart, Search, RefreshCw } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Plus, Search, Phone, ShoppingBag, BarChart2, X, User, MapPin, Package } from 'lucide-react';
 import './Marketplace.css';
 
+/* ─── Market Price Data ─── */
 const allCrops = [
-  { name: "Tomato",       emoji: "🍅", price: 18, prev: 15, unit: "kg",     category: "Vegetables" },
-  { name: "Rice",          emoji: "🌾", price: 35, prev: 37, unit: "kg",     category: "Grains" },
-  { name: "Cotton",        emoji: "☁️", price: 72, prev: 65, unit: "kg",     category: "Cash Crops" },
-  { name: "Wheat",         emoji: "🌿", price: 28, prev: 28, unit: "kg",     category: "Grains" },
-  { name: "Onion",         emoji: "🧅", price: 22, prev: 30, unit: "kg",     category: "Vegetables" },
-  { name: "Potato",        emoji: "🥔", price: 14, prev: 12, unit: "kg",     category: "Vegetables" },
-  { name: "Soybean",       emoji: "🫘", price: 48, prev: 44, unit: "kg",     category: "Cash Crops" },
-  { name: "Maize",         emoji: "🌽", price: 20, prev: 19, unit: "kg",     category: "Grains" },
-  { name: "Mustard",       emoji: "🌼", price: 55, prev: 60, unit: "kg",     category: "Cash Crops" },
-  { name: "Sugarcane",     emoji: "🎋", price: 3.5, prev: 3.5, unit: "kg",  category: "Cash Crops" },
-  { name: "Groundnut",     emoji: "🥜", price: 65, prev: 58, unit: "kg",     category: "Cash Crops" },
-  { name: "Green Chilli",  emoji: "🌶️", price: 40, prev: 55, unit: "kg",    category: "Vegetables" },
-  { name: "Brinjal",       emoji: "🍆", price: 12, prev: 10, unit: "kg",     category: "Vegetables" },
-  { name: "Chickpea",      emoji: "🫘", price: 70, prev: 68, unit: "kg",     category: "Grains" },
-  { name: "Garlic",        emoji: "🧄", price: 80, prev: 75, unit: "kg",     category: "Vegetables" },
+  { name: "Tomato",       emoji: "🍅", price: 18,   prev: 15,   category: "Vegetables" },
+  { name: "Rice",         emoji: "🌾", price: 35,   prev: 37,   category: "Grains" },
+  { name: "Cotton",       emoji: "☁️", price: 72,   prev: 65,   category: "Cash Crops" },
+  { name: "Wheat",        emoji: "🌿", price: 28,   prev: 28,   category: "Grains" },
+  { name: "Onion",        emoji: "🧅", price: 22,   prev: 30,   category: "Vegetables" },
+  { name: "Potato",       emoji: "🥔", price: 14,   prev: 12,   category: "Vegetables" },
+  { name: "Soybean",      emoji: "🫘", price: 48,   prev: 44,   category: "Cash Crops" },
+  { name: "Maize",        emoji: "🌽", price: 20,   prev: 19,   category: "Grains" },
+  { name: "Mustard",      emoji: "🌼", price: 55,   prev: 60,   category: "Cash Crops" },
+  { name: "Groundnut",    emoji: "🥜", price: 65,   prev: 58,   category: "Cash Crops" },
+  { name: "Green Chilli", emoji: "🌶️", price: 40,  prev: 55,   category: "Vegetables" },
+  { name: "Chickpea",     emoji: "🫘", price: 70,   prev: 68,   category: "Grains" },
 ];
 
-const listings = [
-  { crop: "Premium Wheat (Sharbati)", qty: "500 kg", price: "₹28,000", seller: "Ramesh Singh", location: "Nashik" },
-  { crop: "Organic Tomatoes",          qty: "50 kg",  price: "₹900",   seller: "Suresh Kumar", location: "Pune" },
-  { crop: "Basmati Rice",              qty: "1000 kg", price: "₹35,000", seller: "Amit Patel",  location: "Nagpur" },
-  { crop: "Fresh Potatoes",            qty: "200 kg", price: "₹2,800", seller: "Deepak Sharma", location: "Solapur" },
+const getTrend = (p, q) =>
+  p > q ? { icon: <TrendingUp size={14} />, color: "#2e7d32", bg: "#e8f5e9", label: `▲ ₹${(p-q).toFixed(1)}` }
+  : p < q ? { icon: <TrendingDown size={14} />, color: "#c62828", bg: "#ffebee", label: `▼ ₹${(q-p).toFixed(1)}` }
+  : { icon: <Minus size={14} />, color: "#757575", bg: "#f5f5f5", label: "Stable" };
+
+/* ─── Initial Marketplace Listings ─── */
+const initialListings = [
+  { id: 1, crop: "Tomatoes",      emoji: "🍅", qty: 200, price: 20, unit: "kg", seller: "Ramesh Singh",   location: "Nashik",  phone: "+91 98765 43210", category: "Vegetables" },
+  { id: 2, crop: "Basmati Rice",  emoji: "🌾", qty: 500, price: 35, unit: "kg", seller: "Suresh Patel",    location: "Nagpur",  phone: "+91 87654 32109", category: "Grains" },
+  { id: 3, crop: "Fresh Onions",  emoji: "🧅", qty: 300, price: 22, unit: "kg", seller: "Amit Kumar",      location: "Pune",    phone: "+91 76543 21098", category: "Vegetables" },
+  { id: 4, crop: "Cotton Bales",  emoji: "☁️", qty: 100, price: 72, unit: "kg", seller: "Deepak Sharma",   location: "Solapur", phone: "+91 65432 10987", category: "Cash Crops" },
+  { id: 5, crop: "Wheat",         emoji: "🌿", qty: 800, price: 28, unit: "kg", seller: "Vijay Desai",     location: "Latur",   phone: "+91 54321 09876", category: "Grains" },
+  { id: 6, crop: "Green Chilli",  emoji: "🌶️", qty: 80, price: 40, unit: "kg",  seller: "Manoj Reddy",     location: "Aurangabad",phone: "+91 43210 98765",category: "Vegetables" },
 ];
 
-const categories = ["All", "Grains", "Vegetables", "Cash Crops"];
+const categories = ["All", "Vegetables", "Grains", "Cash Crops"];
 
-const getTrend = (price, prev) => {
-  if (price > prev) return { icon: <TrendingUp size={16} />, color: "#2e7d32", bg: "#e8f5e9", label: `▲ ₹${(price - prev).toFixed(1)}` };
-  if (price < prev) return { icon: <TrendingDown size={16} />, color: "#c62828", bg: "#ffebee", label: `▼ ₹${(prev - price).toFixed(1)}` };
-  return { icon: <Minus size={16} />, color: "#757575", bg: "#f5f5f5", label: "Stable" };
-};
+const emptyForm = { crop: '', emoji: '', qty: '', price: '', unit: 'kg', seller: '', location: '', phone: '', category: 'Vegetables' };
 
 const Marketplace = () => {
+  const [activeTab, setActiveTab] = useState('marketplace');
+  const [listings, setListings] = useState(initialListings);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [contactId, setContactId] = useState(null);
 
-  const filtered = allCrops.filter(c =>
-    (category === 'All' || c.category === category) &&
-    c.name.toLowerCase().includes(search.toLowerCase())
+  const filtered = listings.filter(l =>
+    (category === 'All' || l.category === category) &&
+    l.crop.toLowerCase().includes(search.toLowerCase())
   );
 
-  const lastUpdated = "Today, 9:00 AM";
+  const handleAddListing = (e) => {
+    e.preventDefault();
+    const newListing = { ...form, id: Date.now(), qty: parseInt(form.qty), price: parseFloat(form.price), emoji: form.emoji || '🌿' };
+    setListings([newListing, ...listings]);
+    setForm(emptyForm);
+    setShowModal(false);
+  };
 
   return (
     <div className="market-page">
-      {/* Page Header */}
-      <div className="market-header mb-4">
-        <div>
-          <h1>Crop Market Price Dashboard</h1>
-          <p className="text-muted">Live mandi prices from your local market · <span className="refresh-tag"><RefreshCw size={12} /> {lastUpdated}</span></p>
-        </div>
-        <button className="btn btn-primary">
-          <ShoppingCart size={20} /> Sell My Crop
+      {/* ─── Tab Bar ─── */}
+      <div className="market-tab-bar mb-4">
+        <button className={`market-tab ${activeTab === 'marketplace' ? 'active' : ''}`} onClick={() => setActiveTab('marketplace')}>
+          <ShoppingBag size={18} /> Farmer Marketplace
+        </button>
+        <button className={`market-tab ${activeTab === 'prices' ? 'active' : ''}`} onClick={() => setActiveTab('prices')}>
+          <BarChart2 size={18} /> Market Prices
         </button>
       </div>
 
-      {/* Summary Strip */}
-      <div className="summary-strip mb-4">
-        <div className="summary-item up">
-          <TrendingUp size={20} />
-          <div>
-            <p>Price Rise</p>
-            <h3>{allCrops.filter(c => c.price > c.prev).length} Crops</h3>
-          </div>
-        </div>
-        <div className="summary-item down">
-          <TrendingDown size={20} />
-          <div>
-            <p>Price Fall</p>
-            <h3>{allCrops.filter(c => c.price < c.prev).length} Crops</h3>
-          </div>
-        </div>
-        <div className="summary-item stable">
-          <Minus size={20} />
-          <div>
-            <p>Stable</p>
-            <h3>{allCrops.filter(c => c.price === c.prev).length} Crops</h3>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="market-filters mb-4">
-        <div className="search-wrap">
-          <Search size={18} />
-          <input
-            type="text"
-            placeholder="Search crop..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="cat-tabs">
-          {categories.map(c => (
-            <button
-              key={c}
-              className={`cat-tab ${category === c ? 'active' : ''}`}
-              onClick={() => setCategory(c)}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Price Cards Grid */}
-      <div className="price-grid mb-4">
-        {filtered.map((crop, i) => {
-          const trend = getTrend(crop.price, crop.prev);
-          return (
-            <div key={i} className="price-card card">
-              <div className="price-card-top">
-                <span className="crop-emoji-sm">{crop.emoji}</span>
-                <span className="crop-badge">{crop.category}</span>
-              </div>
-              <h3 className="crop-name">{crop.name}</h3>
-              <div className="price-main">
-                <span className="price-value">₹{crop.price}</span>
-                <span className="price-unit">/{crop.unit}</span>
-              </div>
-              <div className="trend-pill" style={{ color: trend.color, backgroundColor: trend.bg }}>
-                {trend.icon} {trend.label}
-              </div>
-              <p className="prev-price">Prev: ₹{crop.prev}/{crop.unit}</p>
-            </div>
-          );
-        })}
-        {filtered.length === 0 && (
-          <div className="no-results text-center text-muted">
-            <p>No crops found for "{search}"</p>
-          </div>
-        )}
-      </div>
-
-      {/* Farmer Listings */}
-      <h2 className="mb-2" style={{ color: 'var(--primary-dark)' }}>🏪 Farmer Marketplace Listings</h2>
-      <p className="text-muted mb-4">Buy directly from local farmers at best prices</p>
-      <div className="listings-grid">
-        {listings.map((item, i) => (
-          <div key={i} className="listing-card card">
+      {/* ══════════════════════════════════════ MARKETPLACE TAB ══════ */}
+      {activeTab === 'marketplace' && (
+        <>
+          <div className="market-header mb-4">
             <div>
-              <h3 style={{ color: 'var(--primary-dark)' }}>{item.crop}</h3>
-              <p className="text-muted mt-1">👤 {item.seller} · 📍 {item.location}</p>
-              <span className="listing-qty">{item.qty} available</span>
+              <h1>Farmer Marketplace</h1>
+              <p className="text-muted">{listings.length} crop listings available from local farmers</p>
             </div>
-            <div className="listing-right">
-              <h2 style={{ color: 'var(--secondary)', margin: 0 }}>{item.price}</h2>
-              <button className="btn btn-outline mt-2" style={{ padding: '0.5rem 1rem', minHeight: 'auto', fontSize: '0.9rem' }}>
-                Contact
-              </button>
+            <button className="btn btn-primary" onClick={() => setShowModal(true)}>
+              <Plus size={20} /> Add My Crop
+            </button>
+          </div>
+
+          {/* Filters */}
+          <div className="market-filters mb-4">
+            <div className="search-wrap">
+              <Search size={18} />
+              <input placeholder="Search crops..." value={search} onChange={e => setSearch(e.target.value)} />
+            </div>
+            <div className="cat-tabs">
+              {categories.map(c => (
+                <button key={c} className={`cat-tab ${category === c ? 'active' : ''}`} onClick={() => setCategory(c)}>{c}</button>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+
+          {/* Listing Cards */}
+          <div className="listings-cards">
+            {filtered.map(item => (
+              <div key={item.id} className="listing-product-card card">
+                {/* Crop Visual */}
+                <div className="crop-visual">
+                  <span>{item.emoji}</span>
+                </div>
+                {/* Category tag */}
+                <span className="listing-cat-tag">{item.category}</span>
+                <h3 className="listing-crop-name">{item.crop}</h3>
+
+                <div className="listing-meta">
+                  <div className="meta-row"><Package size={15} /><span><strong>{item.qty} {item.unit}</strong> available</span></div>
+                  <div className="meta-row"><User size={15} /><span>{item.seller}</span></div>
+                  <div className="meta-row"><MapPin size={15} /><span>{item.location}</span></div>
+                </div>
+
+                <div className="listing-footer">
+                  <div className="listing-price">
+                    <span className="price-big">₹{item.price}</span>
+                    <span className="price-unit-sm">/{item.unit}</span>
+                  </div>
+                  <button
+                    className="btn btn-primary contact-btn"
+                    onClick={() => setContactId(contactId === item.id ? null : item.id)}
+                  >
+                    <Phone size={16} /> Contact Farmer
+                  </button>
+                </div>
+
+                {contactId === item.id && (
+                  <div className="contact-reveal">
+                    <Phone size={16} /> <strong>{item.phone}</strong>
+                    <span className="text-muted ml-1">— Call or WhatsApp</span>
+                  </div>
+                )}
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <p className="text-muted text-center" style={{ gridColumn: '1/-1', padding: '3rem' }}>No listings found.</p>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* ══════════════════════════════════════ PRICES TAB ═══════════ */}
+      {activeTab === 'prices' && (
+        <>
+          <div className="market-header mb-4">
+            <div>
+              <h1>Market Price Dashboard</h1>
+              <p className="text-muted">Today's live mandi prices for major crops</p>
+            </div>
+          </div>
+
+          {/* Summary Strip */}
+          <div className="summary-strip mb-4">
+            <div className="summary-item up"><TrendingUp size={20} /><div><p>Price Rise</p><h3>{allCrops.filter(c => c.price > c.prev).length} Crops</h3></div></div>
+            <div className="summary-item down"><TrendingDown size={20} /><div><p>Price Fall</p><h3>{allCrops.filter(c => c.price < c.prev).length} Crops</h3></div></div>
+            <div className="summary-item stable"><Minus size={20} /><div><p>Stable</p><h3>{allCrops.filter(c => c.price === c.prev).length} Crops</h3></div></div>
+          </div>
+
+          <div className="price-grid">
+            {allCrops.map((crop, i) => {
+              const trend = getTrend(crop.price, crop.prev);
+              return (
+                <div key={i} className="price-card card">
+                  <div className="price-card-top">
+                    <span style={{ fontSize: '1.8rem' }}>{crop.emoji}</span>
+                    <span className="crop-badge">{crop.category}</span>
+                  </div>
+                  <h3 className="crop-name">{crop.name}</h3>
+                  <div className="price-main">
+                    <span className="price-value">₹{crop.price}</span>
+                    <span className="price-unit">/kg</span>
+                  </div>
+                  <div className="trend-pill" style={{ color: trend.color, backgroundColor: trend.bg }}>
+                    {trend.icon} {trend.label}
+                  </div>
+                  <p className="prev-price">Prev: ₹{crop.prev}/kg</p>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {/* ════════ ADD LISTING MODAL ════════ */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-box card" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>📦 Add Crop Listing</h3>
+              <button className="modal-close" onClick={() => setShowModal(false)}><X size={22} /></button>
+            </div>
+            <form onSubmit={handleAddListing}>
+              <div className="grid grid-2" style={{ gap: '0.75rem' }}>
+                <div className="form-group">
+                  <label>Crop Name</label>
+                  <input required placeholder="e.g., Tomatoes" value={form.crop} onChange={e => setForm({...form, crop: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Emoji Icon</label>
+                  <input placeholder="e.g., 🍅" value={form.emoji} onChange={e => setForm({...form, emoji: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Quantity (kg)</label>
+                  <input required type="number" placeholder="e.g., 200" value={form.qty} onChange={e => setForm({...form, qty: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Price per kg (₹)</label>
+                  <input required type="number" placeholder="e.g., 20" value={form.price} onChange={e => setForm({...form, price: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Category</label>
+                  <select value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
+                    <option>Vegetables</option><option>Grains</option><option>Cash Crops</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Your Name</label>
+                  <input required placeholder="Farmer name" value={form.seller} onChange={e => setForm({...form, seller: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Location</label>
+                  <input required placeholder="Village / City" value={form.location} onChange={e => setForm({...form, location: e.target.value})} />
+                </div>
+                <div className="form-group">
+                  <label>Contact Number</label>
+                  <input required placeholder="+91 XXXXX XXXXX" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-primary mt-2" style={{ width: '100%' }}>
+                <Plus size={18} /> Publish Listing
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
