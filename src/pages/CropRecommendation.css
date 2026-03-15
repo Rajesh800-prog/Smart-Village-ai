@@ -1,0 +1,162 @@
+/* Crop Recommendation Page */
+.rec-page { max-width: 1100px; margin: 0 auto; }
+
+.rec-header { margin-bottom: 2rem; }
+
+.rec-icon-wrap {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+}
+
+.rec-layout { align-items: start; }
+
+/* Form Actions */
+.form-actions { display: flex; gap: 0.75rem; }
+
+/* Result Panel */
+.rec-result-panel {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.example-box {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  text-align: left;
+  width: 100%;
+  line-height: 1.8;
+}
+
+/* Loading Animation */
+.result-loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.ai-spin-wrap {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--gray-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-light), var(--primary));
+  border-radius: 4px;
+  animation: progress 2s ease-in-out forwards;
+}
+
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 95%; }
+}
+
+/* Result Content */
+.rec-result-content { display: flex; flex-direction: column; }
+
+.rec-result-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--gray-light);
+  margin-bottom: 1.25rem;
+}
+
+.crop-emoji {
+  font-size: 3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Metrics Grid */
+.rec-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.metric-card {
+  background: #f9f9f9;
+  border: 1px solid var(--gray-light);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.metric-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-card p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.metric-card h3, .metric-card h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+/* Tips */
+.rec-tips {
+  background: #f1f8e9;
+  border-left: 4px solid var(--primary-light);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+/* Spinners */
+.spin { animation: spin 1s linear infinite; }
+.spin-slow { animation: spin 2s linear infinite; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.font-bold { font-weight: 700; }
+.text-primary-dark { color: var(--primary-dark); }

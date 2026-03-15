@@ -1,84 +1,231 @@
 import { useState } from 'react';
-import { Sprout } from 'lucide-react';
+import { Sprout, TrendingUp, IndianRupee, Loader, RotateCcw, CheckCircle } from 'lucide-react';
+import './CropRecommendation.css';
+
+const cropDatabase = {
+  "clay-kharif-high": { crop: "Rice", yield: "5 tons/acre", profit: "₹50,000", icon: "🌾", tips: "Best sown in June-July. Requires standing water up to 15cm. Use certified seeds for best output." },
+  "clay-rabi-medium": { crop: "Wheat", yield: "4 tons/acre", profit: "₹40,000", icon: "🌿", tips: "Sow in October-November. Apply nitrogen fertilizer in 2 splits. Irrigate at crown root initiation stage." },
+  "sandy-kharif-low": { crop: "Groundnut", yield: "2.5 tons/acre", profit: "₹35,000", icon: "🥜", tips: "Ideal for rainfed conditions. Apply gypsum at pegging stage for better pod development." },
+  "sandy-rabi-medium": { crop: "Mustard", yield: "1.5 tons/acre", profit: "₹28,000", icon: "🌼", tips: "Sow in October. Requires 2-3 irrigations. Apply boron for better oil content." },
+  "loamy-kharif-high": { crop: "Soybean", yield: "3 tons/acre", profit: "₹45,000", icon: "🫘", tips: "Plant in June with 45cm row spacing. Inoculate seeds with Rhizobium culture. High protein content crop." },
+  "loamy-rabi-high": { crop: "Tomato", yield: "20 tons/acre", profit: "₹80,000", icon: "🍅", tips: "Transplant 25-day old seedlings. Requires staking. Drip irrigation is highly recommended." },
+  "black-kharif-medium": { crop: "Cotton", yield: "2 tons/acre", profit: "₹60,000", icon: "☁️", tips: "Sow in May-June. Requires 5-6 irrigations. Apply potassium fertilizer to improve fiber quality." },
+  "black-rabi-medium": { crop: "Chickpea", yield: "1.8 tons/acre", profit: "₹30,000", icon: "🫘", tips: "Sow in October-November. Requires minimal irrigation. Highly profitable in dry conditions." },
+  "red-kharif-medium": { crop: "Maize", yield: "6 tons/acre", profit: "₹42,000", icon: "🌽", tips: "High yielding hybrid varieties recommended. Requires 3-4 irrigations. Apply urea at knee-high stage." },
+};
+
+const getKey = (soil, season, water) => {
+  const key = `${soil}-${season}-${water}`;
+  return cropDatabase[key] || {
+    crop: "Pearl Millet (Bajra)",
+    yield: "2 tons/acre",
+    profit: "₹25,000",
+    icon: "🌾",
+    tips: "Highly drought tolerant and suitable for your conditions. Sow in June-July with minimal water requirement."
+  };
+};
 
 const CropRecommendation = () => {
-  const [formData, setFormData] = useState({
-    nitrogen: '',
-    phosphorus: '',
-    potassium: '',
-    ph: '',
-    rainfall: '',
-    location: ''
+  const [form, setForm] = useState({
+    soilType: '',
+    location: '',
+    landSize: '',
+    season: '',
+    water: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [recommendation, setRecommendation] = useState(null);
+  const [result, setResult] = useState(null);
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Mock AI delay
+    setResult(null);
     setTimeout(() => {
-      setRecommendation("Based on a soil pH of " + formData.ph + " and expected rainfall, we highly recommend planting Soybeans or Cotton for optimal yield this season.");
+      const rec = getKey(form.soilType, form.season, form.water);
+      setResult(rec);
       setIsLoading(false);
-    }, 1500);
+    }, 2000);
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleReset = () => {
+    setForm({ soilType: '', location: '', landSize: '', season: '', water: '' });
+    setResult(null);
   };
+
+  const estimatedTotal = form.landSize && result
+    ? `₹${(parseFloat(result.profit.replace(/[^0-9]/g, '')) * parseFloat(form.landSize) / 100000).toFixed(1)}L`
+    : null;
 
   return (
-    <div className="crop-recommendation">
-      <div className="text-center mb-4">
-        <h2>AI Crop Recommendation</h2>
-        <p className="text-muted">Enter your soil and weather parameters to find the best crop for your farm.</p>
+    <div className="rec-page">
+      {/* Header */}
+      <div className="rec-header text-center mb-4">
+        <div className="rec-icon-wrap">
+          <Sprout size={36} color="white" />
+        </div>
+        <h1>AI Crop Recommendation</h1>
+        <p className="text-muted" style={{ fontSize: '1.1rem', maxWidth: 520, margin: '0.5rem auto 0' }}>
+          Tell us about your farm — our AI will recommend the best crop to maximize your income.
+        </p>
       </div>
 
-      <div className="grid grid-2">
+      <div className="grid grid-2 rec-layout">
+        {/* FORM */}
         <div className="card">
+          <h3 className="mb-4" style={{ color: 'var(--primary-dark)' }}>🌍 Enter Your Farm Details</h3>
           <form onSubmit={handleSubmit}>
+
             <div className="form-group">
-              <label>Location / Region</label>
-              <input type="text" name="location" value={formData.location} onChange={handleChange} placeholder="e.g., Punjab" required />
+              <label htmlFor="soilType">Soil Type</label>
+              <select name="soilType" id="soilType" value={form.soilType} onChange={handleChange} required>
+                <option value="">-- Select Soil Type --</option>
+                <option value="clay">Clay Soil</option>
+                <option value="sandy">Sandy Soil</option>
+                <option value="loamy">Loamy Soil</option>
+                <option value="black">Black Cotton Soil</option>
+                <option value="red">Red Laterite Soil</option>
+              </select>
             </div>
-            <div className="grid grid-2">
-              <div className="form-group">
-                <label>Nitrogen (N)</label>
-                <input type="number" name="nitrogen" value={formData.nitrogen} onChange={handleChange} placeholder="Value" required />
-              </div>
-              <div className="form-group">
-                <label>Phosphorous (P)</label>
-                <input type="number" name="phosphorus" value={formData.phosphorus} onChange={handleChange} placeholder="Value" required />
-              </div>
-              <div className="form-group">
-                <label>Potassium (K)</label>
-                <input type="number" name="potassium" value={formData.potassium} onChange={handleChange} placeholder="Value" required />
-              </div>
-              <div className="form-group">
-                <label>Soil pH</label>
-                <input type="number" step="0.1" name="ph" value={formData.ph} onChange={handleChange} placeholder="e.g., 6.5" required />
-              </div>
-            </div>
+
             <div className="form-group">
-              <label>Average Rainfall (mm)</label>
-              <input type="number" name="rainfall" value={formData.rainfall} onChange={handleChange} placeholder="e.g., 200" required />
+              <label htmlFor="location">Location / District</label>
+              <input
+                type="text"
+                name="location"
+                id="location"
+                placeholder="e.g., Nashik, Maharashtra"
+                value={form.location}
+                onChange={handleChange}
+                required
+              />
             </div>
-            <button type="submit" className="btn btn-primary mt-2" style={{ width: '100%' }} disabled={isLoading}>
-              {isLoading ? 'Calculating AI Model...' : 'Get Recommendation'}
-            </button>
+
+            <div className="form-group">
+              <label htmlFor="landSize">Land Size (in Acres)</label>
+              <input
+                type="number"
+                name="landSize"
+                id="landSize"
+                placeholder="e.g., 2.5"
+                min="0.1"
+                step="0.1"
+                value={form.landSize}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="season">Growing Season</label>
+              <select name="season" id="season" value={form.season} onChange={handleChange} required>
+                <option value="">-- Select Season --</option>
+                <option value="kharif">Kharif (June–October)</option>
+                <option value="rabi">Rabi (October–March)</option>
+                <option value="zaid">Zaid (March–June)</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="water">Water Availability</label>
+              <select name="water" id="water" value={form.water} onChange={handleChange} required>
+                <option value="">-- Select Availability --</option>
+                <option value="high">High (River / Canal nearby)</option>
+                <option value="medium">Medium (Borewell / Pond)</option>
+                <option value="low">Low (Rainfed only)</option>
+              </select>
+            </div>
+
+            <div className="form-actions mt-4">
+              <button type="submit" className="btn btn-primary" disabled={isLoading} style={{ flex: 2 }}>
+                {isLoading
+                  ? <><Loader size={20} className="spin" /> Analyzing...</>
+                  : <><Sprout size={20} /> Get AI Recommendation</>}
+              </button>
+              <button type="button" className="btn btn-outline" onClick={handleReset} style={{ flex: 1 }}>
+                <RotateCcw size={18} /> Reset
+              </button>
+            </div>
           </form>
         </div>
 
-        <div className="card flex items-center justify-center text-center" style={{ backgroundColor: recommendation ? '#e8f5e9' : '#f5f5f5' }}>
-          {recommendation ? (
-            <div>
-              <Sprout size={64} color="var(--primary)" style={{ margin: '0 auto 1rem' }} />
-              <h3 className="text-primary-dark">Top Recommendation</h3>
-              <p style={{ fontSize: '1.2rem', marginTop: '1rem' }}>{recommendation}</p>
+        {/* RESULT */}
+        <div className="card rec-result-panel">
+          {!result && !isLoading && (
+            <div className="result-empty text-center">
+              <Sprout size={64} color="var(--gray-light)" style={{ margin: '0 auto 1rem' }} />
+              <h3 style={{ color: 'var(--gray)' }}>No Recommendation Yet</h3>
+              <p className="text-muted">Fill in your farm details and press <strong>"Get AI Recommendation"</strong> to see results.</p>
+              <div className="example-box mt-4">
+                <p className="font-bold mb-1" style={{ color: 'var(--primary-dark)' }}>📌 Example Output:</p>
+                <p>Recommended Crop: <strong>Rice</strong></p>
+                <p>Expected Yield: <strong>5 tons/acre</strong></p>
+                <p>Estimated Profit: <strong>₹50,000/acre</strong></p>
+              </div>
             </div>
-          ) : (
-            <div className="text-muted">
-              <p>Fill out the form and submit to see your AI-tailored crop recommendations here.</p>
+          )}
+
+          {isLoading && (
+            <div className="text-center result-loading">
+              <div className="ai-spin-wrap">
+                <Sprout size={48} color="var(--primary)" className="spin-slow" />
+              </div>
+              <h3 className="mt-4 text-primary">AI is calculating...</h3>
+              <p className="text-muted mt-1">Analyzing soil, season, and water data</p>
+              <div className="progress-bar mt-4">
+                <div className="progress-fill"></div>
+              </div>
+            </div>
+          )}
+
+          {result && !isLoading && (
+            <div className="rec-result-content">
+              <div className="rec-result-header">
+                <div className="crop-emoji">{result.icon}</div>
+                <div>
+                  <p className="text-muted" style={{ margin: 0, fontSize: '0.9rem' }}>Top Recommended Crop</p>
+                  <h1 style={{ margin: 0, color: 'var(--primary-dark)', fontSize: '2rem' }}>{result.crop}</h1>
+                </div>
+                <CheckCircle size={28} color="var(--primary)" style={{ marginLeft: 'auto' }} />
+              </div>
+
+              <div className="rec-metrics">
+                <div className="metric-card">
+                  <div className="metric-icon" style={{ backgroundColor: '#e8f5e9' }}>
+                    <TrendingUp size={24} color="var(--primary)" />
+                  </div>
+                  <p className="text-muted">Expected Yield</p>
+                  <h3 className="text-primary-dark">{result.yield}</h3>
+                </div>
+                <div className="metric-card">
+                  <div className="metric-icon" style={{ backgroundColor: '#fff8e1' }}>
+                    <IndianRupee size={24} color="#f57c00" />
+                  </div>
+                  <p className="text-muted">Profit per Acre</p>
+                  <h3 style={{ color: '#e65100' }}>{result.profit}</h3>
+                </div>
+                {form.landSize && (
+                  <div className="metric-card" style={{ gridColumn: '1/-1', background: 'linear-gradient(135deg, #e8f5e9, #c8e6c9)' }}>
+                    <div className="metric-icon" style={{ backgroundColor: '#a5d6a7' }}>
+                      <IndianRupee size={24} color="var(--primary-dark)" />
+                    </div>
+                    <p style={{ color: 'var(--primary-dark)', margin: 0 }}>Total Estimated Income ({form.landSize} acres)</p>
+                    <h2 style={{ color: 'var(--primary-dark)', margin: 0 }}>
+                      {`₹${(parseInt(result.profit.replace(/[^0-9]/g, '')) * parseFloat(form.landSize)).toLocaleString('en-IN')}`}
+                    </h2>
+                  </div>
+                )}
+              </div>
+
+              <div className="rec-tips mt-4">
+                <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>🌱 Expert Farming Tips</h4>
+                <p style={{ lineHeight: 1.7, color: 'var(--text-dark)' }}>{result.tips}</p>
+              </div>
+
+              <button className="btn btn-outline mt-4" onClick={handleReset} style={{ width: '100%' }}>
+                <RotateCcw size={18} /> Try Another Combination
+              </button>
             </div>
           )}
         </div>
