@@ -1,0 +1,239 @@
+/* Disease Detection Page Styles */
+.disease-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.disease-header {
+  margin-bottom: 2rem;
+}
+
+.disease-icon-wrap {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+}
+
+/* Step Indicator */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 0 auto 2rem;
+  max-width: 520px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--gray-light);
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.step-item.active .step-circle {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(46,125,50,0.2);
+}
+
+.step-item.done .step-circle {
+  background-color: var(--primary-light);
+  color: white;
+}
+
+.step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray);
+  margin-left: 0.4rem;
+  white-space: nowrap;
+}
+
+.step-item.active .step-label { color: var(--primary-dark); }
+.step-item.done .step-label { color: var(--primary); }
+
+.step-line {
+  width: 50px;
+  height: 2px;
+  background-color: var(--gray-light);
+  margin: 0 0.5rem;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.step-line.done { background-color: var(--primary-light); }
+
+/* Upload Zone */
+.upload-zone {
+  border: 2.5px dashed var(--primary-light);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  background-color: #f9fef9;
+  transition: all 0.2s ease;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.upload-zone:hover {
+  border-color: var(--primary);
+  background-color: #f1f8e9;
+}
+
+.upload-zone.has-image {
+  border-style: solid;
+  padding: 0.5rem;
+}
+
+.upload-placeholder p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 1rem 0 0.25rem;
+}
+
+.uploaded-img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 12px;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Action Buttons */
+.upload-actions {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+/* Result Panel */
+.result-panel {
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.result-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.tips-box {
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  width: 100%;
+  text-align: left;
+}
+
+/* Analyzing Loader */
+.ai-loader {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--gray-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-light), var(--primary));
+  border-radius: 4px;
+  animation: progress 2.5s ease-in-out forwards;
+}
+
+@keyframes progress {
+  from { width: 0%; }
+  to { width: 95%; }
+}
+
+/* Spin Animations */
+.spin { animation: spin 1s linear infinite; }
+.spin-slow { animation: spin 2s linear infinite; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Result Content */
+.result-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-light);
+  margin-bottom: 1rem;
+}
+
+.result-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.result-section {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+}
+
+.result-section h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
+
+.result-section p {
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+}

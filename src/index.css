@@ -179,3 +179,43 @@ input:focus, select:focus, textarea:focus {
 .text-danger { color: var(--danger); }
 .text-primary { color: var(--primary); }
 .text-muted { color: var(--gray); font-size: 0.9rem; }
+
+/* SaaS Dashboard Modern Cards */
+.dashboard-modern .card {
+  border: 1px solid var(--gray-light);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dashboard-modern .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--primary-light);
+}
+
+.dashboard-modern .arrow {
+  transition: transform 0.2s ease;
+  display: inline-block;
+}
+
+.dashboard-modern .card:hover .arrow {
+  transform: translateX(6px);
+}
+
+.dashboard-modern .card-action {
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.dashboard-modern .card:hover .card-action {
+  opacity: 1;
+}
+
+.flex-column { display: flex; flex-direction: column; }
+.font-bold { font-weight: 700; }
+.relative { position: relative; }
+.overflow-hidden { overflow: hidden; }

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Home, LayoutDashboard, CloudRain, Sprout, ShoppingCart, Headset, Menu, X, Leaf } from 'lucide-react';
+import { Home, LayoutDashboard, CloudRain, Sprout, ShoppingCart, User, Menu, X, Leaf } from 'lucide-react';
 import { useState } from 'react';
 import './Navbar.css';
 
@@ -11,9 +11,9 @@ const Navbar = () => {
     { to: "/dashboard", icon: <LayoutDashboard size={20} />, label: "Dashboard" },
     { to: "/disease-detection", icon: <Leaf size={20} />, label: "Disease Detection" },
     { to: "/weather", icon: <CloudRain size={20} />, label: "Weather Alerts" },
-    { to: "/recommendation", icon: <Sprout size={20} />, label: "Crop Recommend" },
+    { to: "/recommendation", icon: <Sprout size={20} />, label: "Crop Recommendation" },
     { to: "/marketplace", icon: <ShoppingCart size={20} />, label: "Marketplace" },
-    { to: "/contact", icon: <Headset size={20} />, label: "Contact & Voice" },
+    { to: "/profile", icon: <User size={20} />, label: "Profile" },
   ];
 
   return (

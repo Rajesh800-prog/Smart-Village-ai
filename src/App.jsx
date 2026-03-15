@@ -7,6 +7,7 @@ import WeatherAlerts from './pages/WeatherAlerts';
 import CropRecommendation from './pages/CropRecommendation';
 import Marketplace from './pages/Marketplace';
 import Contact from './pages/Contact';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="recommendation" element={<CropRecommendation />} />
           <Route path="marketplace" element={<Marketplace />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
       </Routes>
     </Router>
