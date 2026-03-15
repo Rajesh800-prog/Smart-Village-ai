@@ -27,51 +27,53 @@ const Login = () => {
 
   return (
     <div className="auth-page">
+      <div className="auth-blob-1"></div>
+      <div className="auth-blob-2"></div>
+      
       <div className="auth-card">
-        {/* Logo */}
         <div className="auth-logo">
-          <div className="auth-icon-wrap"><Sprout size={32} color="white" /></div>
-          <h2>Smart Village AI</h2>
-          <p className="text-muted">Welcome back, Farmer! Please login.</p>
+          <div className="auth-icon-wrap"><Sprout size={36} /></div>
+          <h2>Welcome back!</h2>
+          <p>Login to your farmer dashboard</p>
         </div>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && <div className="auth-error mb-2">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Email Address</label>
             <input
               type="email"
-              placeholder="your@email.com"
+              placeholder="e.g., farmer@village.com"
               value={form.email}
               onChange={e => setForm({ ...form, email: e.target.value })}
               required
             />
           </div>
 
-          <div className="form-group">
+          <div className="form-group mb-4">
             <label>Password</label>
             <div className="pass-wrap">
               <input
                 type={showPass ? 'text' : 'password'}
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 value={form.password}
                 onChange={e => setForm({ ...form, password: e.target.value })}
                 required
               />
               <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)}>
-                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary mt-2" style={{ width: '100%' }} disabled={loading}>
-            {loading ? 'Logging in...' : <><LogIn size={20} /> Login to Dashboard</>}
+          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
+            {loading ? 'Logging in...' : <><LogIn size={20} /> Login Now</>}
           </button>
         </form>
 
         <div className="auth-footer">
-          Don't have an account? <Link to="/register">Register here</Link>
+          New here? <Link to="/register">Create Account</Link>
         </div>
       </div>
     </div>

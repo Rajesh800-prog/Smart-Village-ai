@@ -24,7 +24,7 @@ const Register = () => {
       await register(form);
       navigate('/dashboard');
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') setError('This email is already registered. Please login.');
+      if (err.code === 'auth/email-already-in-use') setError('This email is already registered.');
       else setError('Registration failed. Please try again.');
     }
     setLoading(false);
@@ -34,47 +34,49 @@ const Register = () => {
 
   return (
     <div className="auth-page">
+      <div className="auth-blob-1"></div>
+      <div className="auth-blob-2"></div>
+
       <div className="auth-card auth-card-wide">
-        {/* Logo */}
         <div className="auth-logo">
-          <div className="auth-icon-wrap"><Sprout size={32} color="white" /></div>
+          <div className="auth-icon-wrap"><Sprout size={36} /></div>
           <h2>Create Farmer Account</h2>
-          <p className="text-muted">Join Smart Village AI — it's free!</p>
+          <p>Join Smart Village AI to farm smarter!</p>
         </div>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && <div className="auth-error mb-2">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="auth-grid">
             <div className="form-group">
-              <label>Full Name *</label>
+              <label>Full Name</label>
               <input name="name" placeholder="Rajesh Kumar" value={form.name} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Email Address *</label>
+              <label>Email Address</label>
               <input name="email" type="email" placeholder="your@email.com" value={form.email} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Village / City *</label>
+              <label>Village / City</label>
               <input name="village" placeholder="e.g., Nashik" value={form.village} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Phone Number *</label>
+              <label>Phone Number</label>
               <input name="phone" type="tel" placeholder="+91 XXXXX XXXXX" value={form.phone} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Farm Size (Acres) *</label>
-              <input name="farmSize" type="number" step="0.1" placeholder="e.g., 3.5" value={form.farmSize} onChange={handleChange} required />
+              <label>Farm Size (Acres)</label>
+              <input name="farmSize" type="number" step="0.1" placeholder="e.g., 5.0" value={form.farmSize} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Main Crop *</label>
+              <label>Main Crop</label>
               <select name="mainCrop" value={form.mainCrop} onChange={handleChange} required>
-                <option value="">-- Select Main Crop --</option>
+                <option value="">-- Select Crop --</option>
                 <option>Rice</option>
                 <option>Wheat</option>
                 <option>Cotton</option>
@@ -83,31 +85,30 @@ const Register = () => {
                 <option>Soybean</option>
                 <option>Maize</option>
                 <option>Sugarcane</option>
-                <option>Groundnut</option>
                 <option>Other</option>
               </select>
             </div>
           </div>
 
           <div className="form-group mt-2">
-            <label>Password *</label>
+            <label>Secure Password</label>
             <div className="pass-wrap">
               <input
                 name="password"
                 type={showPass ? 'text' : 'password'}
-                placeholder="Minimum 6 characters"
+                placeholder="6+ characters"
                 value={form.password}
                 onChange={handleChange}
                 required
               />
               <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)}>
-                {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary mt-2" style={{ width: '100%' }} disabled={loading}>
-            {loading ? 'Creating Account...' : <><UserPlus size={20} /> Create My Account</>}
+          <button type="submit" className="btn btn-primary mt-4" style={{ width: '100%' }} disabled={loading}>
+            {loading ? 'Creating Account...' : <><UserPlus size={20} /> Register My Account</>}
           </button>
         </form>
 
