@@ -14,6 +14,8 @@ import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
+import AIAssistant from './pages/AIAssistant';
+
 function App() {
   return (
     <AuthProvider>
@@ -32,6 +34,7 @@ function App() {
             <Route path="weather" element={<WeatherAlerts />} />
             <Route path="recommendation" element={<CropRecommendation />} />
             <Route path="marketplace" element={<Marketplace />} />
+            <Route path="ai-assistant" element={<AIAssistant />} />
             <Route path="contact" element={<Contact />} />
             <Route path="profile" element={<Profile />} />
           </Route>

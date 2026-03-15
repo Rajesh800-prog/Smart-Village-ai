@@ -18,28 +18,20 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password.length < 6) { 
-      toast.error('Password must be at least 6 characters.'); 
+      toast.error('Password must be 6+ characters for security.'); 
       return; 
     }
     setLoading(true);
     try {
       await register(form);
-      toast.success('Farmer Registered Successfully! Welcome to the smart village.');
+      toast.success('Professional Farmer Account Created!');
       navigate('/dashboard');
     } catch (err) {
-      console.error("DEBUG - Registration Error:", err);
-      
-      // Granular Error Feedback
+      console.error("Registration Error:", err);
       if (err.code === 'auth/email-already-in-use') {
-        toast.error('This email is already registered. Please login.');
-      } else if (err.code === 'auth/invalid-email') {
-        toast.error('The email address is not valid.');
-      } else if (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found') {
-        toast.error('Authentication Service not enabled. Please enable "Email/Password" in your Firebase console.');
-      } else if (err.code === 'permission-denied') {
-        toast.error('Database Error: Please check your Firestore Rules.');
+        toast.error('This email is already registered.');
       } else {
-        toast.error(`Registration error: ${err.message || 'Please try again.'}`);
+        toast.error(`Registration error: ${err.message}`);
       }
     }
     setLoading(false);
@@ -54,9 +46,9 @@ const Register = () => {
 
       <div className="auth-card auth-card-wide">
         <div className="auth-logo">
-          <div className="auth-icon-wrap"><Sprout size={36} /></div>
-          <h2>Create Farmer Account</h2>
-          <p>Join Smart Village AI to farm smarter!</p>
+          <div className="auth-icon-wrap"><Sprout size={44} /></div>
+          <h2>Join the Village</h2>
+          <p>Create your smart farming account in 60 seconds</p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -68,12 +60,12 @@ const Register = () => {
 
             <div className="form-group">
               <label>Email Address</label>
-              <input name="email" type="email" placeholder="your@email.com" value={form.email} onChange={handleChange} required />
+              <input name="email" type="email" placeholder="farmer@village.com" value={form.email} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Village / City</label>
-              <input name="village" placeholder="e.g., Nashik" value={form.village} onChange={handleChange} required />
+              <label>Village Name</label>
+              <input name="village" placeholder="Village / City" value={form.village} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
@@ -82,21 +74,18 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label>Farm Size (Acres)</label>
+              <label>Farm Area (Acres)</label>
               <input name="farmSize" type="number" step="0.1" placeholder="e.g., 5.0" value={form.farmSize} onChange={handleChange} required />
             </div>
 
             <div className="form-group">
-              <label>Main Crop</label>
+              <label>Major Crop</label>
               <select name="mainCrop" value={form.mainCrop} onChange={handleChange} required>
-                <option value="">-- Select Crop --</option>
+                <option value="">-- Select Your Main Crop --</option>
                 <option>Rice</option>
                 <option>Wheat</option>
                 <option>Cotton</option>
                 <option>Tomato</option>
-                <option>Onion</option>
-                <option>Soybean</option>
-                <option>Maize</option>
                 <option>Sugarcane</option>
                 <option>Other</option>
               </select>
@@ -109,24 +98,24 @@ const Register = () => {
               <input
                 name="password"
                 type={showPass ? 'text' : 'password'}
-                placeholder="6+ characters"
+                placeholder="Min. 6 characters"
                 value={form.password}
                 onChange={handleChange}
                 required
               />
               <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)}>
-                {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPass ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary mt-4" style={{ width: '100%' }} disabled={loading}>
-            {loading ? 'Creating Account...' : <><UserPlus size={20} /> Register My Account</>}
+          <button type="submit" className="btn btn-primary mt-4" style={{ width: '100%', padding: '1.25rem', fontSize: '1.2rem' }} disabled={loading}>
+            {loading ? 'Creating Profile...' : <><UserPlus size={22} /> Register My Profile</>}
           </button>
         </form>
 
         <div className="auth-footer">
-          Already have an account? <Link to="/login">Login here</Link>
+          Already a member? <Link to="/login">Sign In Here</Link>
         </div>
       </div>
     </div>

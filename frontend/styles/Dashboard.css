@@ -1,0 +1,230 @@
+/* ─── DASHBOARD PREMIUM STYLES ─── */
+
+.dashboard-modern {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Page Header Decor */
+.section-header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.loc-pill {
+  background: rgba(46, 125, 50, 0.08);
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(46, 125, 50, 0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+/* ─── WEATHER HERO WIDGET ─── */
+.weather-hero {
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  color: white;
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(27, 94, 32, 0.2);
+  border: none;
+  margin-bottom: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+@media (max-width: 900px) {
+  .weather-hero {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+    gap: 2rem;
+  }
+}
+
+.weather-main-stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.temp-big {
+  font-size: 4.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.weather-condition-text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.weather-sub-metrics {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+}
+
+.metric-item {
+  text-align: center;
+}
+
+.metric-item-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.metric-item-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+.weather-advice-box {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.advice-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ffeb3b; /* Spotlight color for advice */
+}
+
+.advice-text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* ─── TOOL GRID ─── */
+.dash-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 600px) {
+  .dash-tool-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dash-tool-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.dash-tool-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 60px rgba(46, 125, 50, 0.12);
+  border-color: rgba(46, 125, 50, 0.2);
+}
+
+.card-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.card-icon-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  opacity: 0.12;
+}
+
+.dash-tool-card h3 {
+  font-size: 1.4rem;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-dark);
+}
+
+.dash-tool-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
+}
+
+.card-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  width: fit-content;
+  transition: all 0.3s ease;
+}
+
+.dash-tool-card:hover .card-action-btn {
+  gap: 0.8rem;
+  background-color: var(--primary-dark);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}

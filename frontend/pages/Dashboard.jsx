@@ -1,109 +1,150 @@
 import { useNavigate } from 'react-router-dom';
-import { CloudRain, Sprout, Leaf, TrendingUp, ShoppingBag, Sun, Wind, Droplets, ArrowRight } from 'lucide-react';
+import { CloudRain, Sprout, Leaf, TrendingUp, ShoppingBag, Sun, Wind, Droplets, ArrowRight, MapPin, Sparkles, Zap, Bot } from 'lucide-react';
+import '../styles/Dashboard.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const weatherData = {
-    temp: 32,
+    temp: 31,
     condition: "Sunny",
-    advice: "Perfect day for harvesting tomatoes. Maintain moderate irrigation.",
-    humidity: "65%",
-    wind: "12 km/h"
+    rainProb: "10%",
+    advice: "Optimal weather for pesticide spraying. Avoid irrigation today if soil moisture is high.",
+    humidity: "62%",
+    wind: "14 km/h",
+    location: "Warangal, Telangana"
   };
 
   const menuCards = [
-    { title: "Disease Detection", desc: "Scan crops for instant AI diagnosis", icon: <Leaf size={28} />, path: "/disease-detection", color: "var(--primary)" },
-    { title: "Crop Advice", desc: "Best seeds and soil recommendations", icon: <Sprout size={28} />, path: "/recommendation", color: "#fb8c00" },
-    { title: "Weather Alerts", desc: "Storm warnings and frost protection", icon: <CloudRain size={28} />, path: "/weather", color: "#1e88e5" },
-    { title: "Market Prices", desc: "Live mandi rates for 15+ crops", icon: <TrendingUp size={28} />, path: "/marketplace", color: "#43a047" },
-    { title: "Marketplace", desc: "Sell direct to buyers with no middleman", icon: <ShoppingBag size={28} />, path: "/marketplace", color: "#8e24aa" },
+    { 
+      title: "Weather Intelligence 🌦", 
+      desc: "Live temperature, rainfall predictions, and smart farming advice.", 
+      icon: <CloudRain size={30} />, 
+      path: "/weather", 
+      color: "#1e88e5" 
+    },
+    { 
+      title: "Crop Recommendation 🌱", 
+      desc: "Choose the best crop based on your soil type, season and location.", 
+      icon: <Sprout size={30} />, 
+      path: "/recommendation", 
+      color: "#fb8c00" 
+    },
+    { 
+      title: "Plant Disease Detection 🦠", 
+      desc: "Upload a plant image and detect diseases instantly using AI.", 
+      icon: <Leaf size={30} />, 
+      path: "/disease-detection", 
+      color: "#43a047" 
+    },
+    { 
+      title: "Crop Market Prices 📈", 
+      desc: "Current mandi prices for rice, tomato, wheat, cotton and more.", 
+      icon: <TrendingUp size={30} />, 
+      path: "/marketplace", 
+      color: "#2e7d32" 
+    },
+    { 
+      title: "Farmer Marketplace 🛒", 
+      desc: "Connect with buyers directly and list your crops for sale.", 
+      icon: <ShoppingBag size={30} />, 
+      path: "/marketplace", 
+      color: "#8e24aa" 
+    },
+    { 
+      title: "AI Farming Assistant 🤖", 
+      desc: "Ask any farming question and get instant AI-powered expert guidance.", 
+      icon: <Bot size={30} />, 
+      path: "/ai-assistant", 
+      color: "#00796b" 
+    },
   ];
+
+  /* Add Bot to imports if not there */
 
   return (
     <div className="dashboard-modern">
-      {/* Background Decor */}
-      <div className="bg-blob" style={{ top: '10%', right: '5%' }}></div>
-      <div className="bg-blob" style={{ bottom: '5%', left: '0%', opacity: 0.1 }}></div>
-
-      <div className="flex items-center justify-between mb-4">
-        <h1 style={{ margin: 0 }}>Farmer Dashboard</h1>
-        <div style={{ background: '#e8f5e9', padding: '0.5rem 1rem', borderRadius: '30px', fontSize: '0.9rem', color: 'var(--primary)', fontWeight: 700 }}>
-          📍 Nashik, Maharashtra
+      {/* ─── HEADER ─── */}
+      <div className="section-header-wrap">
+        <div>
+          <h1 style={{ margin: 0, fontSize: '2.2rem' }}>Farmer Dashboard</h1>
+          <p className="text-muted" style={{ margin: '0.25rem 0 0' }}>Welcome back! Here's what's happening on your farm today.</p>
+        </div>
+        <div className="loc-pill">
+          <MapPin size={18} />
+          <span>{weatherData.location}</span>
         </div>
       </div>
 
-      {/* ── PREMIUM WEATHER WIDGET ── */}
-      <div className="glass-card mb-4" style={{ 
-        padding: '2rem', 
-        background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
-        color: 'white',
-        position: 'relative',
-        overflow: 'hidden',
-        border: 'none'
-      }}>
-        <div className="bg-blob" style={{ top: '-50px', right: '-50px', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%)' }}></div>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '2rem', position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-            <Sun size={80} color="var(--secondary)" style={{ filter: 'drop-shadow(0 0 20px rgba(251, 192, 45, 0.4))' }} />
+      {/* ─── WEATHER HERO WIDGET ─── */}
+      <section className="weather-hero">
+        <div className="weather-stats-column">
+          <div className="weather-main-stats">
+            <div className="floating">
+              <Sun size={100} color="#ffb300" style={{ filter: 'drop-shadow(0 0 20px rgba(255, 179, 0, 0.4))' }} />
+            </div>
             <div>
-              <h2 style={{ color: 'white', fontSize: '4rem', margin: 0, lineHeight: 1 }}>{weatherData.temp}°C</h2>
-              <p style={{ opacity: 0.9, fontSize: '1.1rem', fontWeight: 600 }}>{weatherData.condition} · Good Farming Day</p>
+              <h2 className="temp-big">{weatherData.temp}°C</h2>
+              <span className="weather-condition-text">{weatherData.condition} · Clear Sky</span>
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            <div className="text-center">
-              <Droplets size={24} color="rgba(255,255,255,0.7)" style={{ margin: '0 auto 0.5rem' }} />
-              <p style={{ margin: 0, fontSize: '0.8rem', textTransform: 'uppercase', opacity: 0.7 }}>Humidity</p>
-              <h3 style={{ color: 'white', margin: 0 }}>{weatherData.humidity}</h3>
+          <div className="weather-sub-metrics">
+            <div className="metric-item">
+              <p className="metric-item-val">{weatherData.humidity}</p>
+              <p className="metric-item-label">Humidity</p>
             </div>
-            <div className="text-center">
-              <Wind size={24} color="rgba(255,255,255,0.7)" style={{ margin: '0 auto 0.5rem' }} />
-              <p style={{ margin: 0, fontSize: '0.8rem', textTransform: 'uppercase', opacity: 0.7 }}>Wind</p>
-              <h3 style={{ color: 'white', margin: 0 }}>{weatherData.wind}</h3>
+            <div className="metric-item">
+              <p className="metric-item-val">{weatherData.rainProb}</p>
+              <p className="metric-item-label">Rain Prob.</p>
             </div>
-          </div>
-
-          <div style={{ 
-            background: 'rgba(255,255,255,0.15)', 
-            backdropFilter: 'blur(10px)', 
-            padding: '1.25rem', 
-            borderRadius: '20px', 
-            flex: '1', 
-            minWidth: '280px',
-            border: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <p style={{ color: 'white', margin: '0 0 0.5rem', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>💡 AI Farming Advice</p>
-            <p style={{ color: 'white', margin: 0, lineHeight: 1.5, fontSize: '1rem', fontStyle: 'italic' }}>"{weatherData.advice}"</p>
+            <div className="metric-item">
+              <p className="metric-item-val">{weatherData.wind}</p>
+              <p className="metric-item-label">Wind Speed</p>
+            </div>
           </div>
         </div>
+
+        <div className="weather-advice-wrap">
+          <div className="weather-advice-box">
+            <div className="advice-label">
+              <Sparkles size={18} />
+              AI Farming Insight
+            </div>
+            <p className="advice-text">"{weatherData.advice}"</p>
+            <div style={{ marginTop: '1.2rem', display: 'flex', gap: '0.5rem' }}>
+              <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '4px 10px', borderRadius: '10px' }}>
+                <Zap size={12} inline /> Low Risk
+              </span>
+              <span style={{ fontSize: '0.8rem', background: 'rgba(255,255,255,0.1)', padding: '4px 10px', borderRadius: '10px' }}>
+                📅 24h Window
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── TOOL GRID ─── */}
+      <div className="section-header-wrap" style={{ marginBottom: '1.5rem' }}>
+        <h2 style={{ margin: 0 }}>Smart Farming Suite</h2>
       </div>
 
-      <div className="section-header mt-4"><h3>AI Farming Tools</h3></div>
-      
-      {/* ── TOOL CARDS ── */}
-      <div className="grid grid-3 mb-4">
+      <div className="dash-tool-grid">
         {menuCards.map((card, i) => (
-          <div key={i} className="card" onClick={() => navigate(card.path)} style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', minHeight: '200px' }}>
-            <div style={{ 
-              width: '56px', height: '56px', 
-              background: `${card.color}15`, 
-              color: card.color, 
-              borderRadius: '16px', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              marginBottom: '1.25rem' 
-            }}>
+          <div 
+            key={i} 
+            className="dash-tool-card" 
+            onClick={() => navigate(card.path)}
+          >
+            <div className="card-icon-box" style={{ color: card.color }}>
+              <div className="card-icon-bg" style={{ backgroundColor: card.color }}></div>
               {card.icon}
             </div>
-            <h3 style={{ marginBottom: '0.5rem' }}>{card.title}</h3>
-            <p style={{ fontSize: '0.9rem', flexGrow: 1 }}>{card.desc}</p>
-            <div className="card-action" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontWeight: 700, fontSize: '0.9rem', marginTop: '1rem' }}>
-              Open Tool <ArrowRight size={16} className="arrow" />
-            </div>
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+            <button className="btn btn-primary card-action-btn">
+              Explore Tool <ArrowRight size={18} />
+            </button>
           </div>
         ))}
       </div>

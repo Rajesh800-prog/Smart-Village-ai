@@ -190,40 +190,51 @@ const CropRecommendation = () => {
         <div className="card rec-result-panel">
           {!result && !isLoading && (
             <div className="result-empty text-center">
-              <Sprout size={64} color="var(--gray-light)" style={{ margin: '0 auto 1rem' }} />
-              <h3 style={{ color: 'var(--gray)' }}>No Recommendation Yet</h3>
-              <p className="text-muted">Fill in your farm details and press <strong>"Get AI Recommendation"</strong> to see results.</p>
-              <div className="example-box mt-4">
-                <p className="font-bold mb-1" style={{ color: 'var(--primary-dark)' }}>📌 Example Output:</p>
-                <p>Recommended Crop: <strong>Rice</strong></p>
-                <p>Expected Yield: <strong>5 tons/acre</strong></p>
-                <p>Estimated Profit: <strong>₹50,000/acre</strong></p>
+              <Sparkles size={64} color="var(--primary-light)" className="floating" style={{ margin: '0 auto 1.5rem' }} />
+              <h3 style={{ color: 'var(--primary-dark)', fontSize: '1.5rem' }}>AI Recommendation Engine</h3>
+              <p className="text-muted" style={{ lineHeight: 1.6 }}>Our AI models are ready to analyze your farm data. Fill the form to get started.</p>
+              
+              <div className="example-box mt-4" style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '15px', border: '1px solid #e2e8f0' }}>
+                <p className="font-bold mb-2" style={{ color: 'var(--primary-dark)', fontSize: '0.9rem', textTransform: 'uppercase' }}>📌 Sample Analysis:</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
+                  <span>Best Crop:</span> <strong>Rice 🌾</strong>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem', marginTop: '0.5rem' }}>
+                  <span>Est. Profit:</span> <strong style={{color: 'var(--primary)'}}>₹50k/acre</strong>
+                </div>
               </div>
             </div>
           )}
 
           {isLoading && (
-            <div className="text-center result-loading">
-              <div className="ai-spin-wrap">
-                <Sprout size={48} color="var(--primary)" className="spin-slow" />
+            <div className="text-center result-loading" style={{ padding: '4rem 1rem' }}>
+              <div className="ai-pulse-wrap">
+                <Zap size={64} className="spin-slow" color="var(--primary)" style={{ opacity: 0.2, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+                <Sprout size={56} color="var(--primary)" className="floating" />
               </div>
-              <h3 className="mt-4 text-primary">AI is calculating...</h3>
-              <p className="text-muted mt-1">Analyzing soil, season, and water data</p>
-              <div className="progress-bar mt-4">
-                <div className="progress-fill"></div>
+              <h3 className="mt-4 text-primary" style={{ fontSize: '1.4rem' }}>Optimizing Your Yield...</h3>
+              <p className="text-muted mt-2">Checking soil compatibility and market trends</p>
+              <div className="progress-bar mt-4" style={{ height: '8px', background: '#eee', borderRadius: '10px', overflow: 'hidden', width: '80%', margin: '1.5rem auto' }}>
+                <div className="progress-fill" style={{ height: '100%', background: 'var(--primary)', width: '60%', borderRadius: '10px' }}></div>
               </div>
             </div>
           )}
 
           {result && !isLoading && (
             <div className="rec-result-content">
-              <div className="rec-result-header">
-                <div className="crop-emoji">{result.icon}</div>
-                <div>
-                  <p className="text-muted" style={{ margin: 0, fontSize: '0.9rem' }}>Top Recommended Crop</p>
-                  <h1 style={{ margin: 0, color: 'var(--primary-dark)', fontSize: '2rem' }}>{result.crop}</h1>
-                </div>
-                <CheckCircle size={28} color="var(--primary)" style={{ marginLeft: 'auto' }} />
+              <div className="rec-result-hero" style={{ 
+                background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                color: 'white',
+                padding: '2.5rem 1.5rem',
+                borderRadius: '24px',
+                textAlign: 'center',
+                marginBottom: '2rem',
+                position: 'relative'
+              }}>
+                <Sparkles size={100} color="rgba(255,255,255,0.05)" style={{ position: 'absolute', top: '-10px', right: '-10px' }} />
+                <div className="crop-emoji" style={{ margin: '0 auto 1rem', fontSize: '3.5rem', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(5px)' }}>{result.icon}</div>
+                <p style={{ margin: 0, opacity: 0.8, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Top Recommended Crop</p>
+                <h1 style={{ margin: 0, color: 'white', fontSize: '2.5rem' }}>{result.crop}</h1>
               </div>
 
               <div className="rec-metrics">
@@ -231,36 +242,49 @@ const CropRecommendation = () => {
                   <div className="metric-icon" style={{ backgroundColor: '#e8f5e9' }}>
                     <TrendingUp size={24} color="var(--primary)" />
                   </div>
-                  <p className="text-muted">Expected Yield</p>
-                  <h3 className="text-primary-dark">{result.yield}</h3>
+                  <p>Est. Yield</p>
+                  <h3>{result.yield}</h3>
                 </div>
                 <div className="metric-card">
                   <div className="metric-icon" style={{ backgroundColor: '#fff8e1' }}>
                     <IndianRupee size={24} color="#f57c00" />
                   </div>
-                  <p className="text-muted">Profit per Acre</p>
+                  <p>Profit / Acre</p>
                   <h3 style={{ color: '#e65100' }}>{result.profit}</h3>
                 </div>
+                
                 {form.landSize && (
-                  <div className="metric-card" style={{ gridColumn: '1/-1', background: 'linear-gradient(135deg, #e8f5e9, #c8e6c9)' }}>
-                    <div className="metric-icon" style={{ backgroundColor: '#a5d6a7' }}>
-                      <IndianRupee size={24} color="var(--primary-dark)" />
+                  <div className="metric-card total-income-card" style={{ 
+                    gridColumn: '1/-1', 
+                    background: 'rgba(46, 125, 50, 0.05)', 
+                    border: '1px solid rgba(46, 125, 50, 0.2)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: '1.5rem 2rem'
+                  }}>
+                    <div style={{ textAlign: 'left' }}>
+                      <p style={{ margin: 0 }}>Total Projected Income</p>
+                      <span className="text-muted" style={{ fontSize: '0.8rem' }}>For {form.landSize} acres of land</span>
                     </div>
-                    <p style={{ color: 'var(--primary-dark)', margin: 0 }}>Total Estimated Income ({form.landSize} acres)</p>
-                    <h2 style={{ color: 'var(--primary-dark)', margin: 0 }}>
-                      {`₹${(parseInt(result.profit.replace(/[^0-9]/g, '')) * parseFloat(form.landSize)).toLocaleString('en-IN')}`}
-                    </h2>
+                    <div style={{ textAlign: 'right' }}>
+                      <h2 style={{ margin: 0, color: 'var(--primary-dark)', fontSize: '2rem' }}>
+                        ₹{(parseInt(result.profit.replace(/[^0-9]/g, '')) * parseFloat(form.landSize)).toLocaleString('en-IN')}
+                      </h2>
+                    </div>
                   </div>
                 )}
               </div>
 
               <div className="rec-tips mt-4">
-                <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>🌱 Expert Farming Tips</h4>
-                <p style={{ lineHeight: 1.7, color: 'var(--text-dark)' }}>{result.tips}</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <Sprout size={18} color="var(--primary)" />
+                  <h4 style={{ color: 'var(--primary-dark)', margin: 0 }}>Smart Farming Tips</h4>
+                </div>
+                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'var(--text-dark)' }}>{result.tips}</p>
               </div>
 
-              <button className="btn btn-outline mt-4" onClick={handleReset} style={{ width: '100%' }}>
-                <RotateCcw size={18} /> Try Another Combination
+              <button className="btn btn-outline mt-4" onClick={handleReset} style={{ width: '100%', borderRadius: '15px' }}>
+                <RotateCcw size={18} /> New Analysis
               </button>
             </div>
           )}

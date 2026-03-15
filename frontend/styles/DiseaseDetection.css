@@ -1,90 +1,198 @@
-/* Disease Detection — Aesthetic Polish */
-.detection-page { max-width: 900px; margin: 0 auto; }
+/* ─── DISEASE DETECTION PREMIUM PRO ─── */
 
+.disease-page {
+  animation: fadeIn 0.8s ease-out;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.disease-icon-wrap {
+  width: 80px;
+  height: 80px;
+  background: var(--primary);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  box-shadow: 0 15px 35px rgba(46, 125, 50, 0.3);
+}
+
+/* Larger, More Readable Typography */
+.disease-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.disease-header p {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+/* Step Indicator */
 .step-indicator {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  align-items: center;
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto 3rem;
 }
 
-.step {
-  display: flex; align-items: center; gap: 0.6rem;
-  padding: 0.75rem 1.25rem;
-  background: white; border-radius: 40px;
-  border: 1.5px solid var(--gray-light);
-  color: var(--gray); font-weight: 700;
-  transition: all 0.3s;
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
 }
 
-.step.active {
-  background: var(--primary); color: white; border-color: var(--primary);
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-}
-
-.step.done { background: #e8f5e9; color: var(--primary); border-color: var(--primary-light); }
-
-/* ── Upload Area ── */
-.upload-zone {
-  border: 3px dashed var(--gray-light);
-  border-radius: 30px;
-  padding: 4rem 2rem;
-  text-align: center;
-  transition: all 0.3s;
+.step-circle {
+  width: 44px;
+  height: 44px;
   background: white;
-  cursor: pointer;
+  border: 3px solid var(--gray-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--gray);
+  z-index: 1;
+  transition: all 0.3s ease;
 }
 
-.upload-zone:hover, .upload-zone.dragging {
-  border-color: var(--primary-light); background: #f1f8e9;
+.step-item.active .step-circle {
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 0 20px rgba(46, 125, 50, 0.3);
+  transform: scale(1.1);
 }
 
-.upload-icon-circle {
-  width: 80px; height: 80px;
-  background: #e8f5e9; color: var(--primary);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1.5rem;
+.step-item.done .step-circle {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
 }
 
-/* ── Analysis Progress ── */
-.analysis-card {
-  background: white; padding: 3rem 2rem;
-  border-radius: 30px; border: 1px solid var(--gray-light);
+.step-label {
+  font-size: 0.9rem;
+  font-weight: 800;
+  margin-top: 1rem;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.step-line {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  width: 100%;
+  height: 3px;
+  background: var(--gray-light);
+  z-index: 0;
+}
+
+.step-line.done {
+  background: var(--primary);
+}
+
+/* Huge Upload Zone (Action Hub) */
+.upload-zone {
+  border: 4px dashed rgba(46, 125, 50, 0.2);
+  border-radius: 40px;
+  padding: 5rem 2rem;
   text-align: center;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.progress-track {
-  width: 100%; height: 10px; background: #eee;
-  border-radius: 5px; overflow: hidden; margin: 2rem 0;
+.upload-zone:hover {
+  border-color: var(--primary);
+  background: #f0f7f0;
+  transform: scale(1.02);
 }
 
-.progress-fill {
-  height: 100%; background: linear-gradient(90deg, var(--primary-light), var(--primary));
-  transition: width 0.3s;
+.upload-zone.has-image {
+  border: none;
+  padding: 0;
 }
 
-/* ── Result Card ── */
-.result-card {
-  background: white; border-radius: 30px; overflow: hidden;
-  box-shadow: var(--shadow-md); border: 1px solid rgba(0,0,0,0.05);
+.uploaded-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 40px;
 }
 
-.result-header {
-  background: linear-gradient(135deg, var(--primary-light), var(--primary));
-  color: white; padding: 2rem;
+.upload-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
-.result-body { padding: 2rem; }
-
-.advice-section {
-  background: #f1f8e9; padding: 1.5rem;
-  border-radius: 20px; border-left: 5px solid var(--primary);
-  margin-top: 1.5rem;
+.upload-actions .btn {
+  padding: 1.25rem;
+  font-size: 1.1rem;
+  border-radius: 20px;
 }
 
-.treatment-pill {
-  display: inline-block; padding: 0.4rem 1rem;
-  background: #e8f5e9; color: var(--primary);
-  border-radius: 30px; font-weight: 700; font-size: 0.9rem;
-  margin: 0.25rem;
+/* Result Content - Pro Readability */
+.result-content h2 {
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+.result-badges .badge {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+}
+
+.result-section {
+  padding: 2rem;
+  border-radius: 24px;
+  margin-bottom: 1.5rem;
+  border: 2px solid transparent;
+}
+
+.result-section h4 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.result-section p {
+  font-size: 1.15rem;
+  line-height: 1.5;
+}
+
+/* Suggested Solution Card */
+.remedy-card {
+  background: #fffbeb;
+  border-color: #fef3c7 !important;
+}
+
+.prevent-card {
+  background: #ecfdf5;
+  border-color: #d1fae5 !important;
+}
+
+/* History */
+.history-item {
+  transition: all 0.3s ease;
+}
+
+.history-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
 }

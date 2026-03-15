@@ -17,16 +17,12 @@ const Login = () => {
     setLoading(true);
     try {
       await login(form.email, form.password);
-      toast.success('Login Successful! Welcome back.');
+      toast.success('Welcome Back to Smart Village!');
       navigate('/dashboard');
     } catch (err) {
-      console.error("DEBUG - Login Error:", err);
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        toast.error('Invalid Credentials: High-security alert. Please check email/password.');
-      } else if (err.code === 'auth/too-many-requests') {
-        toast.error('Account locked temporarily due to too many failed attempts.');
-      } else if (err.code === 'auth/configuration-not-found') {
-        toast.error('Authentication not set up. Please enable "Email/Password" in your Firebase console.');
+      console.error("Login Error:", err);
+      if (err.code === 'auth/invalid-credential') {
+        toast.error('Invalid Credentials. Please check your email and password.');
       } else {
         toast.error(`Login failed: ${err.message}`);
       }
@@ -41,9 +37,9 @@ const Login = () => {
       
       <div className="auth-card">
         <div className="auth-logo">
-          <div className="auth-icon-wrap"><Sprout size={36} /></div>
-          <h2>Welcome back!</h2>
-          <p>Login to your farmer dashboard</p>
+          <div className="auth-icon-wrap"><Sprout size={40} /></div>
+          <h2>Sign In</h2>
+          <p>Access your professional farmer dashboard</p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -51,36 +47,36 @@ const Login = () => {
             <label>Email Address</label>
             <input
               type="email"
-              placeholder="e.g., farmer@village.com"
+              placeholder="farmer@village.com"
               value={form.email}
               onChange={e => setForm({ ...form, email: e.target.value })}
               required
             />
           </div>
 
-          <div className="form-group mb-4">
-            <label>Password</label>
+          <div className="form-group">
+            <label>Secure Password</label>
             <div className="pass-wrap">
               <input
                 type={showPass ? 'text' : 'password'}
-                placeholder="Enter password"
+                placeholder="••••••••"
                 value={form.password}
                 onChange={e => setForm({ ...form, password: e.target.value })}
                 required
               />
               <button type="button" className="pass-toggle" onClick={() => setShowPass(!showPass)}>
-                {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
+                {showPass ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
-            {loading ? 'Logging in...' : <><LogIn size={20} /> Login Now</>}
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1.25rem', fontSize: '1.2rem', marginTop: '1rem' }} disabled={loading}>
+            {loading ? 'Authenticating...' : <><LogIn size={22} /> Login to Dashboard</>}
           </button>
         </form>
 
         <div className="auth-footer">
-          New here? <Link to="/register">Create Account</Link>
+          New to the village? <Link to="/register">Create Farmer Account</Link>
         </div>
       </div>
     </div>

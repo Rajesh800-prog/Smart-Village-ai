@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Upload, Camera, Leaf, AlertCircle, CheckCircle, RefreshCw, History, Clock } from 'lucide-react';
+import { Upload, Camera, Leaf, AlertCircle, CheckCircle, RefreshCw, History, Clock, Zap, ShieldCheck, Sparkles } from 'lucide-react';
 import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -199,30 +199,44 @@ const DiseaseDetection = () => {
         <div className="card result-panel">
           {!result && !isAnalyzing && (
             <div className="result-placeholder text-center">
-              <Leaf size={64} color="var(--gray-light)" style={{ margin: '0 auto 1rem' }} />
-              <h3 style={{ color: 'var(--gray)' }}>Awaiting Analysis</h3>
-              <p className="text-muted">Upload a plant photo and click <strong>"Detect Disease"</strong> to see the AI diagnosis here.</p>
-              <div className="tips-box mt-4">
-                <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>📝 Tips for best results:</h4>
-                <ul style={{ textAlign: 'left', paddingLeft: '1.5rem', color: 'var(--gray)' }}>
-                  <li>Use good natural lighting</li>
-                  <li>Focus on the affected area</li>
-                  <li>Keep the camera steady</li>
-                  <li>Avoid blurry photos</li>
-                </ul>
+              <div className="status-orb" style={{ width: '80px', height: '80px', background: '#f8fafc', borderRadius: '50%', margin: '0 auto 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Zap size={40} color="#cbd5e1" />
+              </div>
+              <h3 style={{ color: 'var(--primary-dark)', fontSize: '1.5rem' }}>AI Diagnosis Lab</h3>
+              <p className="text-muted" style={{ lineHeight: 1.6 }}>Upload a leaf photo to trigger our deep-learning neural network for disease identification.</p>
+              
+              <div className="tips-box mt-4" style={{ textAlign: 'left', background: 'rgba(46, 125, 50, 0.04)', padding: '1.5rem', borderRadius: '20px', border: '1px solid rgba(46, 125, 50, 0.08)' }}>
+                <h4 style={{ color: 'var(--primary-dark)', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                   <Sparkles size={18} /> Farmers Guide
+                </h4>
+                <div style={{ display: 'grid', gap: '0.75rem' }}>
+                  <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem' }}>
+                    <div style={{ background: 'var(--primary)', width: '6px', height: '6px', borderRadius: '50%', marginTop: '6px' }}></div>
+                    <span>Use direct sunlight for better clarity.</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem' }}>
+                    <div style={{ background: 'var(--primary)', width: '6px', height: '6px', borderRadius: '50%', marginTop: '6px' }}></div>
+                    <span>Ensure the affected spot is in the center.</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.9rem' }}>
+                    <div style={{ background: 'var(--primary)', width: '6px', height: '6px', borderRadius: '50%', marginTop: '6px' }}></div>
+                    <span>Keep the camera 5-10 cm away.</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
 
           {isAnalyzing && (
-            <div className="text-center" style={{ padding: '3rem 1rem' }}>
-              <div className="ai-loader">
-                <Leaf size={48} color="var(--primary)" className="spin-slow" />
+            <div className="text-center" style={{ padding: '5rem 1rem' }}>
+              <div className="ai-loader floating">
+                <div className="scanning-line"></div>
+                <Leaf size={48} color="var(--primary)" />
               </div>
-              <h3 className="mt-4 text-primary">AI is analyzing your photo...</h3>
-              <p className="text-muted mt-2">This usually takes a few seconds</p>
-              <div className="progress-bar mt-4">
-                <div className="progress-fill"></div>
+              <h3 className="mt-4 text-primary" style={{ fontSize: '1.4rem' }}>Neural Analysis Running...</h3>
+              <p className="text-muted mt-2">Connecting to SmartAgri AI Clusters</p>
+              <div className="progress-bar mt-4" style={{ height: '8px', background: '#eee', borderRadius: '100px', width: '80%', margin: '2rem auto', overflow: 'hidden' }}>
+                <div className="progress-fill" style={{ height: '100%', background: 'var(--primary)', width: '75%', borderRadius: '100px' }}></div>
               </div>
             </div>
           )}
@@ -230,38 +244,42 @@ const DiseaseDetection = () => {
           {result && !isAnalyzing && (
             <div className="result-content">
               <div className="result-header">
-                <AlertCircle size={24} color={severityColor[result.severity]} />
+                <div style={{ background: result.severity === 'High' ? '#fee2e2' : '#fef3c7', padding: '12px', borderRadius: '16px' }}>
+                  <AlertCircle size={32} color={severityColor[result.severity]} />
+                </div>
                 <div>
-                  <p style={{ margin: 0, color: 'var(--gray)', fontSize: '0.85rem' }}>Detected Disease</p>
-                  <h2 style={{ margin: 0, color: result.severity === 'High' ? '#d32f2f' : '#e65100' }}>
+                  <p style={{ margin: 0, color: 'var(--gray)', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase' }}>AI diagnosis confirmed</p>
+                  <h2 style={{ margin: 0, color: 'var(--primary-dark)', fontSize: '1.8rem' }}>
                     {result.disease}
                   </h2>
                 </div>
               </div>
 
               <div className="result-badges">
-                <span className="badge" style={{ backgroundColor: '#e8f5e9', color: 'var(--primary-dark)' }}>
-                  🎯 Confidence: {result.confidence}
+                <span className="badge" style={{ backgroundColor: '#f0f9ff', color: '#0369a1' }}>
+                  🎯 {result.confidence} AI Confidence
                 </span>
-                <span className="badge" style={{ backgroundColor: severityColor[result.severity] + '20', color: severityColor[result.severity] }}>
-                  ⚠️ Severity: {result.severity}
+                <span className="badge" style={{ backgroundColor: severityColor[result.severity] + '15', color: severityColor[result.severity] }}>
+                  ⚠️ {result.severity} Risk
                 </span>
               </div>
 
-              <p className="text-muted mt-2" style={{ lineHeight: 1.7 }}>{result.description}</p>
+              <p className="text-muted" style={{ lineHeight: 1.7, fontSize: '1rem', borderTop: '1px solid #eee', paddingTop: '1.5rem', marginTop: '1.5rem' }}>
+                <strong style={{ color: 'var(--text-dark)' }}>Insight:</strong> {result.description}
+              </p>
 
-              <div className="result-section mt-4" style={{ backgroundColor: '#fff8e1', borderLeft: '4px solid #fbc02d' }}>
-                <h4>💊 Suggested Treatment</h4>
-                <p>{result.treatment}</p>
+              <div className="result-section remedy-card mt-4">
+                <h4 style={{ color: '#92400e' }}><Zap size={18} /> Suggested Solution</h4>
+                <p style={{ margin: 0, color: '#92400e', fontSize: '1.15rem', fontWeight: 600, lineHeight: 1.6 }}>{result.treatment}</p>
               </div>
 
-              <div className="result-section mt-2" style={{ backgroundColor: '#e8f5e9', borderLeft: '4px solid var(--primary)' }}>
-                <h4>🛡️ Preventive Measures</h4>
-                <p>{result.preventive}</p>
+              <div className="result-section prevent-card mt-2">
+                <h4 style={{ color: '#065f46' }}><ShieldCheck size={18} /> Preventive Measures</h4>
+                <p style={{ margin: 0, color: '#065f46', fontSize: '1rem', lineHeight: 1.6 }}>{result.preventive}</p>
               </div>
 
-              <button className="btn btn-primary mt-4" style={{ width: '100%' }} onClick={resetAll}>
-                <RefreshCw size={18} /> Analyze Another Plant
+              <button className="btn btn-primary mt-4" style={{ width: '100%', padding: '1.5rem', borderRadius: '20px', fontSize: '1.25rem' }} onClick={resetAll}>
+                <RefreshCw size={24} /> New Field Scan
               </button>
             </div>
           )}

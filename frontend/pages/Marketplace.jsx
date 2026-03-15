@@ -23,9 +23,9 @@ const defaultCrops = [
 ];
 
 const getTrend = (p, q) =>
-  p > q ? { icon: <TrendingUp size={14} />, color: "#2e7d32", bg: "#e8f5e9", label: `▲ ₹${(p-q).toFixed(1)}` }
-  : p < q ? { icon: <TrendingDown size={14} />, color: "#c62828", bg: "#ffebee", label: `▼ ₹${(q-p).toFixed(1)}` }
-  : { icon: <Minus size={14} />, color: "#757575", bg: "#f5f5f5", label: "Stable" };
+  p > q ? { icon: <TrendingUp size={16} />, color: "#1b5e20", bg: "#e8f5e9", label: `+₹${(p-q).toFixed(1)} Today` }
+  : p < q ? { icon: <TrendingDown size={16} />, color: "#c62828", bg: "#fff1f1", label: `-₹${(q-p).toFixed(1)} Today` }
+  : { icon: <Minus size={16} />, color: "#475569", bg: "#f1f5f9", label: "Market Stable" };
 
 /* ─── Initial Marketplace Listings ─── */
 const initialListings = [
@@ -39,7 +39,7 @@ const initialListings = [
 
 const categories = ["All", "Vegetables", "Grains", "Cash Crops"];
 
-const emptyForm = { crop: '', emoji: '', qty: '', price: '', unit: 'kg', seller: '', location: '', phone: '', category: 'Vegetables' };
+const emptyForm = { crop: '', image: '', qty: '', price: '', unit: 'kg', seller: '', location: '', phone: '', category: 'Vegetables' };
 
 const Marketplace = () => {
   const { currentUser, farmerProfile } = useAuth();
@@ -105,7 +105,7 @@ const Marketplace = () => {
         ...form,
         qty: parseInt(form.qty),
         price: parseFloat(form.price),
-        emoji: form.emoji || '🌿',
+        image: form.image || '',
         sellerId: currentUser?.uid || 'guest',
         createdAt: serverTimestamp(),
       });
@@ -167,16 +167,21 @@ const Marketplace = () => {
                 <div key={item.id} className="listing-product-card card">
                   {/* Crop Visual */}
                   <div className="crop-visual">
-                    <span>{item.emoji}</span>
+                    {item.image ? (
+                      <img src={item.image} alt={item.crop} className="crop-image-actual" />
+                    ) : (
+                      <span className="crop-emoji-fallback">{item.emoji || '📦'}</span>
+                    )}
+                    <span className="listing-cat-tag">{item.category}</span>
                   </div>
-                  {/* Category tag */}
-                  <span className="listing-cat-tag">{item.category}</span>
-                  <h3 className="listing-crop-name">{item.crop}</h3>
-
-                  <div className="listing-meta">
-                    <div className="meta-row"><Package size={15} /><span><strong>{item.qty} {item.unit}</strong> available</span></div>
-                    <div className="meta-row"><User size={15} /><span>{item.seller}</span></div>
-                    <div className="meta-row"><MapPin size={15} /><span>{item.location}</span></div>
+                  
+                  <div className="listing-body">
+                    <h3 className="listing-crop-name">{item.crop}</h3>
+                    <div className="listing-meta">
+                      <div className="meta-row"><Package size={15} /><span><strong>{item.qty} {item.unit}</strong> available</span></div>
+                      <div className="meta-row"><User size={15} /><span>{item.seller}</span></div>
+                      <div className="meta-row"><MapPin size={15} /><span>{item.location}</span></div>
+                    </div>
                   </div>
 
                   <div className="listing-footer">
@@ -270,9 +275,30 @@ const Marketplace = () => {
                   <label>Crop Name</label>
                   <input required placeholder="e.g., Tomatoes" value={form.crop} onChange={e => setForm({...form, crop: e.target.value})} />
                 </div>
-                <div className="form-group">
-                  <label>Emoji Icon</label>
-                  <input placeholder="e.g., 🍅" value={form.emoji} onChange={e => setForm({...form, emoji: e.target.value})} />
+                <div className="form-group" style={{ gridColumn: '1/-1' }}>
+                  <label>Crop Image</label>
+                  <div className="image-upload-trigger">
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={e => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => setForm({...form, image: reader.result});
+                          reader.readAsDataURL(file);
+                        }
+                      }} 
+                    />
+                    {form.image ? (
+                      <img src={form.image} alt="Preview" className="upload-preview" />
+                    ) : (
+                      <div className="upload-btn-interior">
+                        <Plus size={24} />
+                        <span>Select Image from Phone/PC</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="form-group">
                   <label>Quantity (kg)</label>
