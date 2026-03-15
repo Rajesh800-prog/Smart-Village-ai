@@ -25,6 +25,8 @@ const Login = () => {
         toast.error('Invalid Credentials: High-security alert. Please check email/password.');
       } else if (err.code === 'auth/too-many-requests') {
         toast.error('Account locked temporarily due to too many failed attempts.');
+      } else if (err.code === 'auth/configuration-not-found') {
+        toast.error('Authentication not set up. Please enable "Email/Password" in your Firebase console.');
       } else {
         toast.error(`Login failed: ${err.message}`);
       }

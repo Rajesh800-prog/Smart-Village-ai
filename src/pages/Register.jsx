@@ -34,8 +34,8 @@ const Register = () => {
         toast.error('This email is already registered. Please login.');
       } else if (err.code === 'auth/invalid-email') {
         toast.error('The email address is not valid.');
-      } else if (err.code === 'auth/operation-not-allowed') {
-        toast.error('Email sign-in is not enabled in your Firebase console.');
+      } else if (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found') {
+        toast.error('Authentication Service not enabled. Please enable "Email/Password" in your Firebase console.');
       } else if (err.code === 'permission-denied') {
         toast.error('Database Error: Please check your Firestore Rules.');
       } else {
