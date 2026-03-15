@@ -1,5 +1,8 @@
-import { useState } from 'react';
-import { TrendingUp, TrendingDown, Minus, Plus, Search, Phone, ShoppingBag, BarChart2, X, User, MapPin, Package } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { TrendingUp, TrendingDown, Minus, Plus, Search, Phone, ShoppingBag, BarChart2, X, User, MapPin, Package, Loader2 } from 'lucide-react';
+import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
 import './Marketplace.css';
 
 /* ─── Market Price Data ─── */
@@ -38,25 +41,61 @@ const categories = ["All", "Vegetables", "Grains", "Cash Crops"];
 const emptyForm = { crop: '', emoji: '', qty: '', price: '', unit: 'kg', seller: '', location: '', phone: '', category: 'Vegetables' };
 
 const Marketplace = () => {
+  const { currentUser, farmerProfile } = useAuth();
   const [activeTab, setActiveTab] = useState('marketplace');
-  const [listings, setListings] = useState(initialListings);
+  const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [contactId, setContactId] = useState(null);
 
+  // ─── Fetch real-time listings from Firestore ───
+  useEffect(() => {
+    const q = query(collection(db, 'listings'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setListings(docs);
+      setLoading(false);
+    });
+    return unsubscribe;
+  }, []);
+
+  // Pre-fill form with farmer profile if available
+  useEffect(() => {
+    if (showModal && farmerProfile) {
+      setForm(prev => ({
+        ...prev,
+        seller: farmerProfile.name || '',
+        location: farmerProfile.village || '',
+        phone: farmerProfile.phone || ''
+      }));
+    }
+  }, [showModal, farmerProfile]);
+
   const filtered = listings.filter(l =>
     (category === 'All' || l.category === category) &&
     l.crop.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleAddListing = (e) => {
+  const handleAddListing = async (e) => {
     e.preventDefault();
-    const newListing = { ...form, id: Date.now(), qty: parseInt(form.qty), price: parseFloat(form.price), emoji: form.emoji || '🌿' };
-    setListings([newListing, ...listings]);
-    setForm(emptyForm);
-    setShowModal(false);
+    try {
+      await addDoc(collection(db, 'listings'), {
+        ...form,
+        qty: parseInt(form.qty),
+        price: parseFloat(form.price),
+        emoji: form.emoji || '🌿',
+        sellerId: currentUser?.uid || 'guest',
+        createdAt: serverTimestamp(),
+      });
+      setForm(emptyForm);
+      setShowModal(false);
+    } catch (err) {
+      console.error("Error adding listing:", err);
+      alert("Failed to publish listing. Please try again.");
+    }
   };
 
   return (
@@ -99,44 +138,51 @@ const Marketplace = () => {
 
           {/* Listing Cards */}
           <div className="listings-cards">
-            {filtered.map(item => (
-              <div key={item.id} className="listing-product-card card">
-                {/* Crop Visual */}
-                <div className="crop-visual">
-                  <span>{item.emoji}</span>
-                </div>
-                {/* Category tag */}
-                <span className="listing-cat-tag">{item.category}</span>
-                <h3 className="listing-crop-name">{item.crop}</h3>
-
-                <div className="listing-meta">
-                  <div className="meta-row"><Package size={15} /><span><strong>{item.qty} {item.unit}</strong> available</span></div>
-                  <div className="meta-row"><User size={15} /><span>{item.seller}</span></div>
-                  <div className="meta-row"><MapPin size={15} /><span>{item.location}</span></div>
-                </div>
-
-                <div className="listing-footer">
-                  <div className="listing-price">
-                    <span className="price-big">₹{item.price}</span>
-                    <span className="price-unit-sm">/{item.unit}</span>
-                  </div>
-                  <button
-                    className="btn btn-primary contact-btn"
-                    onClick={() => setContactId(contactId === item.id ? null : item.id)}
-                  >
-                    <Phone size={16} /> Contact Farmer
-                  </button>
-                </div>
-
-                {contactId === item.id && (
-                  <div className="contact-reveal">
-                    <Phone size={16} /> <strong>{item.phone}</strong>
-                    <span className="text-muted ml-1">— Call or WhatsApp</span>
-                  </div>
-                )}
+            {loading ? (
+              <div className="flex items-center justify-center" style={{ gridColumn: '1/-1', padding: '4rem' }}>
+                <Loader2 className="animate-spin" size={40} color="var(--primary)" />
+                <p className="ml-2">Loading live market...</p>
               </div>
-            ))}
-            {filtered.length === 0 && (
+            ) : (
+              filtered.map(item => (
+                <div key={item.id} className="listing-product-card card">
+                  {/* Crop Visual */}
+                  <div className="crop-visual">
+                    <span>{item.emoji}</span>
+                  </div>
+                  {/* Category tag */}
+                  <span className="listing-cat-tag">{item.category}</span>
+                  <h3 className="listing-crop-name">{item.crop}</h3>
+
+                  <div className="listing-meta">
+                    <div className="meta-row"><Package size={15} /><span><strong>{item.qty} {item.unit}</strong> available</span></div>
+                    <div className="meta-row"><User size={15} /><span>{item.seller}</span></div>
+                    <div className="meta-row"><MapPin size={15} /><span>{item.location}</span></div>
+                  </div>
+
+                  <div className="listing-footer">
+                    <div className="listing-price">
+                      <span className="price-big">₹{item.price}</span>
+                      <span className="price-unit-sm">/{item.unit}</span>
+                    </div>
+                    <button
+                      className="btn btn-primary contact-btn"
+                      onClick={() => setContactId(contactId === item.id ? null : item.id)}
+                    >
+                      <Phone size={16} /> Contact Farmer
+                    </button>
+                  </div>
+
+                  {contactId === item.id && (
+                    <div className="contact-reveal">
+                      <Phone size={16} /> <strong>{item.phone}</strong>
+                      <span className="text-muted ml-1">— Call or WhatsApp</span>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+            {!loading && filtered.length === 0 && (
               <p className="text-muted text-center" style={{ gridColumn: '1/-1', padding: '3rem' }}>No listings found.</p>
             )}
           </div>

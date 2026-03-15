@@ -1,5 +1,8 @@
-import { useState, useRef } from 'react';
-import { Upload, Camera, Leaf, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Upload, Camera, Leaf, AlertCircle, CheckCircle, RefreshCw, History, Clock } from 'lucide-react';
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
 import './DiseaseDetection.css';
 
 const mockDiseases = [
@@ -32,12 +35,28 @@ const mockDiseases = [
 const severityColor = { High: '#d32f2f', Moderate: '#f57c00', Low: '#388e3c' };
 
 const DiseaseDetection = () => {
+  const { currentUser } = useAuth();
   const [imgSrc, setImgSrc] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
   const [step, setStep] = useState(1); // 1=upload, 2=analyzing, 3=result
+  const [history, setHistory] = useState([]);
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
+
+  // ─── Fetch User's Scan History ───
+  useEffect(() => {
+    if (!currentUser) return;
+    const q = query(
+      collection(db, 'scans'),
+      where('userId', '==', currentUser.uid),
+      orderBy('createdAt', 'desc')
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setHistory(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    return unsubscribe;
+  }, [currentUser]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -48,15 +67,32 @@ const DiseaseDetection = () => {
     }
   };
 
-  const analyzeImage = () => {
+  const analyzeImage = async () => {
     if (!imgSrc) return;
     setIsAnalyzing(true);
     setStep(2);
-    setTimeout(() => {
+    
+    // Simulate AI delay
+    setTimeout(async () => {
       const random = mockDiseases[Math.floor(Math.random() * mockDiseases.length)];
       setResult(random);
       setIsAnalyzing(false);
       setStep(3);
+
+      // ─── Save to Firestore ───
+      if (currentUser) {
+        try {
+          await addDoc(collection(db, 'scans'), {
+            userId: currentUser.uid,
+            disease: random.disease,
+            confidence: random.confidence,
+            severity: random.severity,
+            createdAt: serverTimestamp(),
+          });
+        } catch (err) {
+          console.error("Error saving scan:", err);
+        }
+      }
     }, 2500);
   };
 
@@ -98,7 +134,6 @@ const DiseaseDetection = () => {
           <h3 className="mb-2" style={{ color: 'var(--primary-dark)' }}>📷 Upload Your Plant Photo</h3>
           <p className="text-muted mb-4">Take a clear close-up photo of the affected leaves or stem.</p>
 
-          {/* Upload Zone */}
           <div
             className={`upload-zone ${imgSrc ? 'has-image' : ''}`}
             onClick={() => fileInputRef.current.click()}
@@ -121,7 +156,6 @@ const DiseaseDetection = () => {
             />
           </div>
 
-          {/* Action Buttons */}
           <div className="upload-actions">
             <button
               className="btn btn-outline"
@@ -166,7 +200,6 @@ const DiseaseDetection = () => {
               <Leaf size={64} color="var(--gray-light)" style={{ margin: '0 auto 1rem' }} />
               <h3 style={{ color: 'var(--gray)' }}>Awaiting Analysis</h3>
               <p className="text-muted">Upload a plant photo and click <strong>"Detect Disease"</strong> to see the AI diagnosis here.</p>
-
               <div className="tips-box mt-4">
                 <h4 style={{ color: 'var(--primary-dark)', marginBottom: '0.5rem' }}>📝 Tips for best results:</h4>
                 <ul style={{ textAlign: 'left', paddingLeft: '1.5rem', color: 'var(--gray)' }}>
@@ -232,6 +265,31 @@ const DiseaseDetection = () => {
           )}
         </div>
       </div>
+
+      {/* ─── SCAN HISTORY SECTION ─── */}
+      {currentUser && history.length > 0 && (
+        <div className="card mt-4 p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <History size={24} color="var(--primary)" />
+            <h3 style={{ margin: 0 }}>Your Scan History</h3>
+          </div>
+          <div className="history-list grid grid-3">
+            {history.map(item => (
+              <div key={item.id} className="history-item glass-card p-3" style={{ display: 'flex', alignItems: 'center', gap: '1rem', background: 'white' }}>
+                <div style={{ background: severityColor[item.severity] + '15', padding: '10px', borderRadius: '12px' }}>
+                  <Leaf size={24} color={severityColor[item.severity]} />
+                </div>
+                <div>
+                  <h4 style={{ margin: 0, fontSize: '1rem' }}>{item.disease}</h4>
+                  <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.7 }}>
+                    <Clock size={12} /> {item.createdAt?.toDate().toLocaleDateString()} · {item.confidence} Match
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
