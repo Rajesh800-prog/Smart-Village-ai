@@ -118,7 +118,115 @@
   flex: 1; min-width: 160px;
   background: white; border-radius: 20px;
   border: 1px solid var(--gray-light);
+  padding: 1.5rem;
 }
 
 .summary-item.up { background: #e8f5e9; color: #1b5e20; border-color: #c8e6c9; }
 .summary-item.down { background: #fff1f1; color: #c62828; border-color: #ffcdd2; }
+
+/* ── Marketplace Filters ── */
+.market-filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 280px;
+  max-width: 450px;
+}
+
+.search-wrap svg {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-wrap input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3.5rem;
+  border-radius: 18px;
+  border: 1px solid var(--gray-light);
+  background: white;
+  font-size: 1rem;
+  transition: all 0.3s;
+  box-shadow: var(--shadow-sm);
+}
+
+.search-wrap input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+  outline: none;
+}
+
+.cat-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cat-tab {
+  padding: 0.6rem 1.25rem;
+  border-radius: 30px;
+  border: 1px solid var(--gray-light);
+  background: white;
+  color: var(--text-muted);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Outfit', sans-serif;
+}
+
+.cat-tab:hover {
+  border-color: var(--primary-light);
+  color: var(--primary);
+  background: #f1f8e9;
+}
+
+.cat-tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
+}
+
+/* ── Empty State ── */
+.market-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 5rem 2rem;
+  background: rgba(0,0,0,0.02);
+  border-radius: 32px;
+  border: 2px dashed var(--gray-light);
+}
+
+.empty-icon-wrap {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: var(--shadow-sm);
+  color: var(--gray-light);
+}
+
+.market-empty-state h3 {
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.market-empty-state p {
+  color: var(--text-muted);
+  max-width: 400px;
+  margin: 0 auto;
+}

@@ -183,7 +183,13 @@ const Marketplace = () => {
               ))
             )}
             {!loading && filtered.length === 0 && (
-              <p className="text-muted text-center" style={{ gridColumn: '1/-1', padding: '3rem' }}>No listings found.</p>
+              <div className="market-empty-state">
+                <div className="empty-icon-wrap">
+                  <ShoppingBag size={48} />
+                </div>
+                <h3>No crops found</h3>
+                <p>We couldn't find any listings matching your search or category. Try clearing filters or search for something else.</p>
+              </div>
             )}
           </div>
         </>
