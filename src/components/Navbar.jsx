@@ -6,7 +6,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, dbConnected } = useAuth();
   const navigate = useNavigate();
 
   const navLinks = [
@@ -32,7 +32,13 @@ const Navbar = () => {
           <div style={{ background: 'var(--primary)', padding: '6px', borderRadius: '10px', display: 'flex' }}>
             <Sprout color="white" size={24} />
           </div>
-          <span>Smart Village AI</span>
+          <div className="logo-text-wrap">
+            <span>Smart Village AI</span>
+            <div className={`db-status ${dbConnected ? 'online' : 'offline'}`}>
+              <div className="status-dot"></div>
+              <span>{dbConnected ? 'Database Live' : 'Connecting...'}</span>
+            </div>
+          </div>
         </NavLink>
         
         <div className="menu-icon" onClick={() => setIsOpen(!isOpen)}>

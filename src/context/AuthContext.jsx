@@ -7,7 +7,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 
 const AuthContext = createContext();
 
@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [farmerProfile, setFarmerProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [dbConnected, setDbConnected] = useState(false);
 
   // Register new farmer
   const register = async ({ email, password, name, village, phone, farmSize, mainCrop }) => {
@@ -45,8 +46,14 @@ export const AuthProvider = ({ children }) => {
 
   // Fetch farmer profile from Firestore
   const fetchProfile = async (uid) => {
-    const snap = await getDoc(doc(db, 'farmers', uid));
-    if (snap.exists()) setFarmerProfile(snap.data());
+    try {
+      const snap = await getDoc(doc(db, 'farmers', uid));
+      if (snap.exists()) setFarmerProfile(snap.data());
+      setDbConnected(true);
+    } catch (err) {
+      console.error("Profile Fetch Error:", err);
+      setDbConnected(false);
+    }
   };
 
   useEffect(() => {
@@ -60,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, farmerProfile, register, login, logout, loading }}>
+    <AuthContext.Provider value={{ currentUser, farmerProfile, register, login, logout, loading, dbConnected }}>
       {!loading && children}
     </AuthContext.Provider>
   );

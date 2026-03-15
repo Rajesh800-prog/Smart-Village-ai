@@ -150,3 +150,17 @@
   .nav-link span { display: inline; }
   .nav-auth-wrap { width: 100%; margin: 1rem 0 0; }
 }
+
+/* ── Navbar Status Indicator ── */
+.logo-text-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
+.db-status { display: flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.3s; }
+.db-status.online { color: #2e7d32; }
+.db-status.offline { color: #d32f2f; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.online .status-dot { box-shadow: 0 0 8px #4caf50; animation: pulse 2s infinite; }
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 1; }
+}

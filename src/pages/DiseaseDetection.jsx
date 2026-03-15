@@ -54,6 +54,8 @@ const DiseaseDetection = () => {
     );
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setHistory(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    }, (err) => {
+      console.error("Firestore Scan History Error:", err);
     });
     return unsubscribe;
   }, [currentUser]);

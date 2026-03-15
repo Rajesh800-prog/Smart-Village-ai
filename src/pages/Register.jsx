@@ -27,11 +27,19 @@ const Register = () => {
       toast.success('Farmer Registered Successfully! Welcome to the smart village.');
       navigate('/dashboard');
     } catch (err) {
-      console.error(err);
+      console.error("DEBUG - Registration Error:", err);
+      
+      // Granular Error Feedback
       if (err.code === 'auth/email-already-in-use') {
-        toast.error('This email is already registered.');
+        toast.error('This email is already registered. Please login.');
+      } else if (err.code === 'auth/invalid-email') {
+        toast.error('The email address is not valid.');
+      } else if (err.code === 'auth/operation-not-allowed') {
+        toast.error('Email sign-in is not enabled in your Firebase console.');
+      } else if (err.code === 'permission-denied') {
+        toast.error('Database Error: Please check your Firestore Rules.');
       } else {
-        toast.error('Registration failed. Please try again.');
+        toast.error(`Registration error: ${err.message || 'Please try again.'}`);
       }
     }
     setLoading(false);

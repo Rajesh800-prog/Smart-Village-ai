@@ -58,6 +58,10 @@ const Marketplace = () => {
       const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setListings(docs);
       setLoading(false);
+    }, (err) => {
+      console.error("Firestore Marketplace Error:", err);
+      toast.error("Marketplace Connection Error: " + err.message);
+      setLoading(false);
     });
     return unsubscribe;
   }, []);

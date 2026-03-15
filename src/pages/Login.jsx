@@ -20,11 +20,13 @@ const Login = () => {
       toast.success('Login Successful! Welcome back.');
       navigate('/dashboard');
     } catch (err) {
-      console.error(err);
+      console.error("DEBUG - Login Error:", err);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        toast.error('Invalid credentials. Please check your email and password.');
+        toast.error('Invalid Credentials: High-security alert. Please check email/password.');
+      } else if (err.code === 'auth/too-many-requests') {
+        toast.error('Account locked temporarily due to too many failed attempts.');
       } else {
-        toast.error('Login failed. Please try again later.');
+        toast.error(`Login failed: ${err.message}`);
       }
     }
     setLoading(false);
