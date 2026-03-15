@@ -3,7 +3,7 @@ import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp 
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import './CropRecommendation.css';
+import '../styles/CropRecommendation.css';
 
 const cropDatabase = {
   "clay-kharif-high": { crop: "Rice", yield: "5 tons/acre", profit: "₹50,000", icon: "🌾", tips: "Best sown in June-July. Requires standing water up to 15cm. Use certified seeds for best output." },

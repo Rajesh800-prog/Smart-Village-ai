@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Home, LayoutDashboard, CloudRain, Sprout, ShoppingCart, User, Menu, X, Leaf, LogIn, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import './Navbar.css';
+import '../styles/Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

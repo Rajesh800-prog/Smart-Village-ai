@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Sprout, Eye, EyeOff } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
-import './Auth.css';
+import '../styles/Auth.css';
 
 const Login = () => {
   const { login } = useAuth();

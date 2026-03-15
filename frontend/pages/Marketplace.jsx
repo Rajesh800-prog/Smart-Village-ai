@@ -3,7 +3,7 @@ import { TrendingUp, TrendingDown, Minus, Plus, Search, Phone, ShoppingBag, BarC
 import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import './Marketplace.css';
+import '../styles/Marketplace.css';
 
 /* ─── Market Price Data ─── */
 /* ─── Initial Market Price Data ─── */

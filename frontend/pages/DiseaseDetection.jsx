@@ -3,7 +3,7 @@ import { Upload, Camera, Leaf, AlertCircle, CheckCircle, RefreshCw, History, Clo
 import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import './DiseaseDetection.css';
+import '../styles/DiseaseDetection.css';
 
 const mockDiseases = [
   {

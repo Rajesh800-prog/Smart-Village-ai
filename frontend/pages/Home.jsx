@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Leaf, CloudRain, ShoppingBag, Sprout, TrendingUp, Sparkles, ArrowRight, Zap, ShieldCheck, Globe } from 'lucide-react';
-import './Home.css';
+import '../styles/Home.css';
 import heroImg from '../assets/hero_illustration.png';
 
 const features = [

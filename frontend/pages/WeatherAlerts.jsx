@@ -4,7 +4,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import './WeatherAlerts.css';
+import '../styles/WeatherAlerts.css';
 
 const weatherData = {
   location: "Nashik, Maharashtra",
