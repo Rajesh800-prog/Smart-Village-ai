@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogIn, Sprout, Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
@@ -8,19 +9,23 @@ const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
     try {
       await login(form.email, form.password);
+      toast.success('Login Successful! Welcome back.');
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      console.error(err);
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        toast.error('Invalid credentials. Please check your email and password.');
+      } else {
+        toast.error('Login failed. Please try again later.');
+      }
     }
     setLoading(false);
   };
@@ -36,8 +41,6 @@ const Login = () => {
           <h2>Welcome back!</h2>
           <p>Login to your farmer dashboard</p>
         </div>
-
-        {error && <div className="auth-error mb-2">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

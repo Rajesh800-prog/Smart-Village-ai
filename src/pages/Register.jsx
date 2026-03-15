@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Sprout, Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
@@ -11,21 +12,27 @@ const Register = () => {
     name: '', email: '', password: '', village: '',
     phone: '', farmSize: '', mainCrop: ''
   });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    if (form.password.length < 6) { setError('Password must be at least 6 characters.'); return; }
+    if (form.password.length < 6) { 
+      toast.error('Password must be at least 6 characters.'); 
+      return; 
+    }
     setLoading(true);
     try {
       await register(form);
+      toast.success('Farmer Registered Successfully! Welcome to the smart village.');
       navigate('/dashboard');
     } catch (err) {
-      if (err.code === 'auth/email-already-in-use') setError('This email is already registered.');
-      else setError('Registration failed. Please try again.');
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') {
+        toast.error('This email is already registered.');
+      } else {
+        toast.error('Registration failed. Please try again.');
+      }
     }
     setLoading(false);
   };
@@ -43,8 +50,6 @@ const Register = () => {
           <h2>Create Farmer Account</h2>
           <p>Join Smart Village AI to farm smarter!</p>
         </div>
-
-        {error && <div className="auth-error mb-2">{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="auth-grid">

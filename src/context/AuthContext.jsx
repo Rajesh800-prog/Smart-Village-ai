@@ -6,8 +6,8 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
+import { serverTimestamp } from 'firebase/firestore';
 
 const AuthContext = createContext();
 
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       phone,
       farmSize,
       mainCrop,
-      createdAt: new Date().toISOString(),
+      createdAt: serverTimestamp(),
     });
 
     return result;
