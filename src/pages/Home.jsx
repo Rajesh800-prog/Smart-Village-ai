@@ -1,77 +1,167 @@
 import { Link } from 'react-router-dom';
-import { Leaf, CloudRain, ShoppingCart, Sprout, TrendingUp } from 'lucide-react';
+import { Leaf, CloudRain, ShoppingBag, Sprout, TrendingUp, Sparkles, ArrowRight, Zap, ShieldCheck, Globe } from 'lucide-react';
+import './Home.css';
+import heroImg from '../assets/hero_illustration.png';
 
-const services = [
-  { icon: <Leaf size={36} color="#388e3c" />, bg: '#f1f8e9', title: "Disease Detection", desc: "Upload a photo of your sick plant for instant AI diagnosis.", link: "/disease-detection" },
-  { icon: <CloudRain size={36} color="#1976d2" />, bg: '#e3f2fd', title: "Weather Alerts", desc: "Timely forecasts and alerts to protect your harvest.", link: "/weather" },
-  { icon: <Sprout size={36} color="var(--primary)" />, bg: '#e8f5e9', title: "Crop Recommendation", desc: "AI suggests the best crop for your soil and season.", link: "/recommendation" },
-  { icon: <TrendingUp size={36} color="#f57c00" />, bg: '#fff3e0', title: "Market Prices", desc: "See today's live mandi prices before you sell.", link: "/marketplace" },
-  { icon: <ShoppingCart size={36} color="#7b1fa2" />, bg: '#f3e5f5', title: "Farmer Marketplace", desc: "Sell your crops directly to buyers — no middlemen.", link: "/marketplace" },
+const features = [
+  { 
+    icon: "🌦", 
+    title: "Weather Intelligence", 
+    desc: "Real-time updates and AI farming advice based on your local climate.", 
+    link: "/weather",
+    bg: "#e3f2fd",
+    color: "#1976d2"
+  },
+  { 
+    icon: "🌱", 
+    title: "Crop Recommendation", 
+    desc: "Find the most profitable crops for your specific soil type and season.", 
+    link: "/recommendation",
+    bg: "#e8f5e9",
+    color: "var(--primary)"
+  },
+  { 
+    icon: "🦠", 
+    title: "Disease Detection", 
+    desc: "Instant diagnosis and treatment suggestions for 30+ crop diseases.", 
+    link: "/disease-detection",
+    bg: "#f1f8e9",
+    color: "#388e3c"
+  },
+  { 
+    icon: "📈", 
+    title: "Market Insights", 
+    desc: "Live mandi rates and price trends to help you sell at the best time.", 
+    link: "/marketplace",
+    bg: "#fff3e0",
+    color: "#f57c00"
+  },
+  { 
+    icon: "🛒", 
+    title: "Farmer Marketplace", 
+    desc: "Direct access to buyers. Sell your harvest without any middleman.", 
+    link: "/marketplace",
+    bg: "#f3e5f5",
+    color: "#7b1fa2"
+  }
 ];
 
-const Home = () => (
-  <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-    {/* Hero */}
-    <div style={{
-      background: 'linear-gradient(135deg, var(--primary-light) 0%, var(--primary-dark) 100%)',
-      borderRadius: '20px',
-      padding: 'clamp(2rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem)',
-      color: 'white',
-      marginBottom: '2rem',
-      textAlign: 'center',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* BG decoration */}
-      <Sprout size={200} color="rgba(255,255,255,0.06)" style={{ position: 'absolute', right: -40, top: -60, pointerEvents: 'none' }} />
-      
-      <div style={{ position: 'relative' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.15)', padding: '0.4rem 1rem', borderRadius: '20px', fontSize: '0.9rem', marginBottom: '1rem' }}>
-          🌾 AI-Powered Farming Platform
-        </div>
-        <h1 style={{ fontSize: 'clamp(1.6rem, 5vw, 2.8rem)', textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>
-          Welcome to Smart Village AI
-        </h1>
-        <p style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', maxWidth: '560px', margin: '0.75rem auto 2rem', opacity: 0.9 }}>
-          Empowering farmers with Artificial Intelligence to improve crop productivity and income.
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <Link to="/disease-detection" className="btn" style={{ background: 'white', color: 'var(--primary-dark)', minWidth: '160px' }}>
-            🔬 Detect Disease
-          </Link>
-          <Link to="/dashboard" className="btn btn-outline" style={{ borderColor: 'white', color: 'white', minWidth: '160px' }}>
-            Go to Dashboard
-          </Link>
-        </div>
-      </div>
-    </div>
-
-    {/* Services */}
-    <h2 className="text-center mb-2" style={{ color: 'var(--primary-dark)' }}>🌟 Our AI-Powered Services</h2>
-    <p className="text-center text-muted mb-4">Everything you need to farm smarter</p>
-    <div className="grid grid-3" style={{ gap: '1rem' }}>
-      {services.map((s, i) => (
-        <Link to={s.link} key={i} style={{ textDecoration: 'none', color: 'inherit' }}>
-          <div className="card text-center" style={{ border: '1px solid var(--gray-light)', transition: 'all 0.25s' }}>
-            <div style={{ backgroundColor: s.bg, padding: '1rem', borderRadius: '14px', display: 'inline-flex', marginBottom: '0.75rem' }}>
-              {s.icon}
+const Home = () => {
+  return (
+    <div className="home-container">
+      {/* ── HERO SECTION ── */}
+      <section className="home-hero">
+        <div className="hero-content-wrap">
+          <div className="hero-text">
+            <div className="hero-tag">
+              <Sparkles size={16} /> Empowering Rural Innovation
             </div>
-            <h3 style={{ marginBottom: '0.4rem' }}>{s.title}</h3>
-            <p className="text-muted" style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>{s.desc}</p>
+            <h1 className="hero-headline">
+              Empowering Farmers with <strong>Artificial Intelligence</strong>
+            </h1>
+            <p className="hero-subheadline">
+              Smart Village AI helps farmers improve crop productivity, detect diseases instantly, and access live market prices to make smarter farming decisions.
+            </p>
+            <div className="hero-ctas">
+              <Link to="/register" className="btn btn-primary">
+                Get Started Free <ArrowRight size={20} />
+              </Link>
+              <Link to="/dashboard" className="btn btn-outline">
+                Explore Features
+              </Link>
+            </div>
+            
+            <div className="hero-stats mt-4" style={{ display: 'flex', gap: '2rem', marginTop: '3rem', borderTop: '1px solid #eee', paddingTop: '2rem' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.8rem' }}>10k+</h3>
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>Active Farmers</p>
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.8rem' }}>95%</h3>
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>AI Accuracy</p>
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.8rem' }}>24/7</h3>
+                <p style={{ margin: 0, fontSize: '0.9rem' }}>Smart Advice</p>
+              </div>
+            </div>
           </div>
-        </Link>
-      ))}
-    </div>
 
-    {/* CTA Banner */}
-    <div className="mt-4" style={{ background: '#e8f5e9', borderRadius: '16px', padding: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center', justifyContent: 'space-between' }}>
-      <div>
-        <h3 style={{ color: 'var(--primary-dark)', margin: 0 }}>Ready to start farming smarter?</h3>
-        <p className="text-muted" style={{ margin: '0.25rem 0 0' }}>Create your free farmer account today.</p>
-      </div>
-      <Link to="/register" className="btn btn-primary">🚀 Get Started Free</Link>
+          <div className="hero-image">
+            <img src={heroImg} alt="Smart Farming AI" className="hero-illustration" />
+          </div>
+        </div>
+      </section>
+
+      {/* ── FEATURE HIGHLIGHTS ── */}
+      <section className="feature-highlights">
+        <div className="intro-text-center" style={{ maxWidth: '800px', margin: '0 auto 4rem', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Smarter Tools for Modern Farming</h2>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)' }}>
+            Our integrated platform brings the world's most advanced AI models directly to your fingertips, optimized for field use.
+          </p>
+        </div>
+
+        <div className="features-grid">
+          {features.map((f, i) => (
+            <Link to={f.link} key={i} className="feature-card" style={{ textDecoration: 'none' }}>
+              <div className="feature-icon-box" style={{ backgroundColor: f.bg }}>
+                <span style={{ fontSize: '2rem' }}>{f.icon}</span>
+              </div>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+              <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--primary)', fontWeight: 700, fontSize: '0.95rem' }}>
+                Try Tool <ArrowRight size={16} />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── TRUST SECTION ── */}
+      <section style={{ padding: '5rem 1rem', textAlign: 'center' }}>
+        <h2 className="mb-4">Trusted by Village Communities</h2>
+        <div className="flex flex-wrap justify-center gap-4">
+          <div className="glass-card p-4 flex items-center gap-2" style={{ minWidth: '200px' }}>
+            <Zap size={24} className="text-primary" />
+            <span style={{ fontWeight: 700 }}>Fast Analysis</span>
+          </div>
+          <div className="glass-card p-4 flex items-center gap-2" style={{ minWidth: '200px' }}>
+            <ShieldCheck size={24} className="text-primary" />
+            <span style={{ fontWeight: 700 }}>Secure Data</span>
+          </div>
+          <div className="glass-card p-4 flex items-center gap-2" style={{ minWidth: '200px' }}>
+            <Globe size={24} className="text-primary" />
+            <span style={{ fontWeight: 700 }}>Local Support</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FINAL CTA ── */}
+      <section style={{ padding: '4rem 1rem 8rem' }}>
+        <div className="card text-center" style={{ 
+          background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
+          padding: '4rem 2rem',
+          borderRadius: '40px',
+          color: 'white',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div className="bg-blob" style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', background: 'white', opacity: 0.1 }}></div>
+          
+          <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '1.5rem' }}>Ready to Transform Your Farm?</h2>
+          <p style={{ opacity: 0.9, fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto 2.5rem' }}>
+            Join thousands of farmers using Smart Village AI to increase their yield and secure their future.
+          </p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <Link to="/register" className="btn btn-secondary" style={{ padding: '1rem 3rem', fontSize: '1.2rem' }}>
+              Create Free Account
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-);
+  );
+};
 
 export default Home;
